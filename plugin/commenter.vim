@@ -4,7 +4,7 @@
 " Vim: enc=utf-8
 
 augroup comment
-    autocmd BufEnter,BufRead,BufNewFile * :call s:SetUpFormat(&filetype)
+    autocmd BufEnter,BufRead,BufNewFile * :call s:setUpFormat(&filetype)
 augroup END
 
 let s:commentMap = {
@@ -17,11 +17,19 @@ let s:commentMap = {
             \ 'vim':    '" '
             \ }
 
-" Function: s:SetUpFormat(filetype) function
+" Function: s:mapMetaKey() function
+" 設定 <M-/> 也就是 Alt+/
+function! s:mapMetaKey()
+    execute "set <M-/>=\e/"
+endfunction
+call mapMetaKey()
+
+
+" Function: s:setUpFormat(filetype) function
 " 搜尋 commentMap 中是否有註解格式
 " Args:
 "   -filetype: 檔案類型
-function! s:SetUpFormat(filetype)
+function! s:setUpFormat(filetype)
     let ft = a:filetype
     if has_key(s:commentMap, ft)
         let s:format = s:commentMap[ft]
