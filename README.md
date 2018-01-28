@@ -14,14 +14,13 @@
 ## 2. Usage
 ### 2.a. Settings
 ```vim
-" Show the comment information by default
-let g:commenter_show_info = 1
-```
-![show\_info](https://imgur.com/x0GGgGd.png)
-```vim
 " Use <M-/> namely Alt+/ to toggle comment in n, i, v mode by default
 " Feel free to change mapping you like
 let g:commenter_n_key = "<M-/>"
 let g:commenter_i_key = "<M-/>"
 let g:commenter_v_key = "<M-/>"
+
+" Show the comment information by default
+let g:commenter_show_info = 1
 ```
+![show\_info](https://imgur.com/x0GGgGd.png)
