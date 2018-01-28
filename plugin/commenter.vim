@@ -47,7 +47,7 @@ endfunction
 "
 " Returns:
 "   1 if the var is set, 0 otherwise
-function s:initVariable(var, value)
+function! s:initVariable(var, value)
     if !exists(a:var)
         execute 'let ' . a:var . ' = ' . "'" . a:value . "'"
         return 1
