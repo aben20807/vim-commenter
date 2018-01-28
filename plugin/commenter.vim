@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-28 19:59:08
+" Last Modified: 2018-01-28 22:12:48
 " Vim: enc=utf-8
 
 augroup comment
@@ -10,6 +10,7 @@ augroup END
 let s:commentMap = {
             \ 'c':      '// '   ,
             \ 'cpp':    '// '   ,
+            \ 'java':   '// '   ,
             \ 'make':   '# '    ,
             \ 'python': '# '    ,
             \ 'rust':   '// '   ,
@@ -56,6 +57,9 @@ endfunction
 
 " Section: variable initialization
 call s:initVariable("g:commenter_show_info", 1)
+call s:initVariable("g:commenter_n_key", "<M-/>")
+call s:initVariable("g:commenter_i_key", "<M-/>")
+call s:initVariable("g:commenter_v_key", "<M-/>")
 
 
 " Function: s:subString() function
@@ -199,9 +203,9 @@ endfunctio
 
 
 " Section: key map設定
-nnoremap <silent> <Plug>Comment :<C-u>call <SID>comment()<CR>
-nmap <M-/> <Plug>Comment
-inoremap <silent> <Plug>Comment :<C-u>call <SID>comment()<CR>
-imap <M-/> <ESC> <Plug>Comment hi
-vnoremap <silent> <Plug>Comment :<C-u>call <SID>commentV()<CR>
-vmap <M-/> <Plug>Comment
+function! s:setUpKeyMap()
+    execute "nnoremap <silent> ".g:commenter_n_key." :<C-u>call <SID>comment()<CR>"
+    execute "inoremap <silent> ".g:commenter_i_key." <ESC>:<C-u>call <SID>comment()<CR>hi"
+    execute "vnoremap <silent> ".g:commenter_v_key." :<C-u>call <SID>commentV()<CR>"
+endfunction
+call s:setUpKeyMap()
