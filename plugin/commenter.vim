@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
-" Filename: comment.vim
-" Last Modified: 2018-01-25 22:11:40
+" Filename: commenter.vim
+" Last Modified: 2018-01-28 19:59:08
 " Vim: enc=utf-8
 
 augroup comment
@@ -37,6 +37,27 @@ function! s:setUpFormat(filetype)
 endfunction
 
 
+" Function: s:initVariable() function
+" 初始化變數
+" Ref: https://github.com/scrooloose/nerdcommenter/blob/master/plugin/NERD_commenter.vim#L26
+" Args:
+"   -var: the name of the var to be initialised
+"   -value: the value to initialise var to
+"
+" Returns:
+"   1 if the var is set, 0 otherwise
+function s:initVariable(var, value)
+    if !exists(a:var)
+        execute 'let ' . a:var . ' = ' . "'" . a:value . "'"
+        return 1
+    endif
+    return 0
+endfunction
+
+" Section: variable initialization
+call s:initVariable("g:commenter_show_info", 1)
+
+
 " Function: s:subString() function
 " 用於提出整行的子字串, 長度根據註解格式長度
 "
@@ -61,10 +82,12 @@ endfunction
 "   -1代表前方有註解符號, 否則回傳0, -1代表沒有設定則不給註解
 function! s:isComment()
     if !exists("s:format")
-        redraw
-        echohl WarningMsg
-        echo "   ❖  無設定註解格式 ❖ "
-        echohl NONE
+        if g:commenter_show_info
+            redraw
+            echohl WarningMsg
+            echo "   ❖  無設定註解格式 ❖ "
+            echohl NONE
+        endif
         return -1
     endif
     let s:nowcol = col(".")
@@ -99,10 +122,12 @@ endfunction
 " i, n模式下的加入註解
 function! s:commentAdd()
     execute "normal \<S-^>i".s:format."\<ESC>"
-    redraw
-    echohl WarningMsg
-    echo "   ❖  加入註解 ❖ "
-    echohl NONE
+    if g:commenter_show_info
+        redraw
+        echohl WarningMsg
+        echo "   ❖  加入註解 ❖ "
+        echohl NONE
+    endif
 endfunction
 
 
@@ -110,10 +135,12 @@ endfunction
 " i, n模式下的移除註解
 function! s:commentDel()
     execute "normal \<S-^>".strlen(s:format)."x"
-    redraw
-    echohl WarningMsg
-    echo "   ❖  移除註解 ❖ "
-    echohl NONE
+    if g:commenter_show_info
+        redraw
+        echohl WarningMsg
+        echo "   ❖  移除註解 ❖ "
+        echohl NONE
+    endif
 endfunctio
 
 
@@ -140,10 +167,12 @@ function! s:commentVAdd()
         let i+=1
     endwhile
     execute "normal k"
-    redraw
-    echohl WarningMsg
-    echo "   ❖  加入註解 ❖ "
-    echohl NONE
+    if g:commenter_show_info
+        redraw
+        echohl WarningMsg
+        echo "   ❖  加入註解 ❖ "
+        echohl NONE
+    endif
 endfunction
 
 
@@ -160,10 +189,12 @@ function! s:commentVDel()
         let i+=1
     endwhile
     execute "normal k"
-    redraw
-    echohl WarningMsg
-    echo "   ❖  移除註解 ❖ "
-    echohl NONE
+    if g:commenter_show_info
+        redraw
+        echohl WarningMsg
+        echo "   ❖  移除註解 ❖ "
+        echohl NONE
+    endif
 endfunctio
 
 
