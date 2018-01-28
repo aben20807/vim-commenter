@@ -12,7 +12,10 @@
 3. Run `:PluginInstall`
 
 ## 2. Usage
-### 2.a. Settings
+### 2.a. Supported Languages
++ C, C++, Java, Makefile, Python, Rust, Shell script, Vim script.
+
+### 2.b. Settings
 ```vim
 " Use <M-/> namely Alt+/ to toggle comment in n, i, v mode by default
 " Feel free to change mapping you like
