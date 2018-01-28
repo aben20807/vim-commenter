@@ -22,7 +22,7 @@ let s:commentMap = {
 function! s:mapMetaKey()
     execute "set <M-/>=\e/"
 endfunction
-call mapMetaKey()
+call s:mapMetaKey()
 
 
 " Function: s:setUpFormat(filetype) function
