@@ -184,22 +184,44 @@ function! s:commentV(vmode)
             execute "normal! gv"
         endif
     elseif a:vmode ==# 'v'
-        " execute "normal! gv"
-        " let b:il = line('.')
-        " let b:ic = col('.')
-        " execute "normal! o"
-        " let b:jl = line('.')
-        " let b:jc = col('.')
-        " let b:isAtEnd = (b:jl > b:il) || (b:jl == b:il) && (b:jc > b:ic)
+        execute "normal! `>a".b:br
+        execute "normal! `<i".b:bl
+        " Ref: https://superuser.com/a/114087
+        execute "normal! gv"
+        let b:il = line('.')
+        let b:ic = col('.')
+        execute "normal! o"
+        let b:jl = line('.')
+        let b:jc = col('.')
+        redraw
+        echohl WarningMsg
+        " echoerr "   ❖  DEBUG ❖ (".b:il.",".b:ic."), (".b:jl.",".b:jc.") "
+        echohl NONE
+        if b:il > b:jl || ((b:il == b:jl) && (b:ic > b:jc))
+            execute "normal! o"
+            " if b:jl == b:il
+            " else
+                " execute "normal! ".(strlen(b:br))."l"
+            " endif
+        endif
         " Ref: https://stackoverflow.com/a/32758226/6734174
         " execute "normal! gvs".b:bl.b:br
         " execute "normal! ".strlen(b:br)."hp"
         " Ref: https://stackoverflow.com/q/11176159/6734174
-        execute "normal! `>a".b:br
-        execute "normal! `<i".b:bl
         if g:commenter_keep_select
             " FIXME cannot select right area
-            " execute "normal! gv".(strlen(b:bl) + strlen(b:br))."l"
+            if b:jl == b:il
+                execute "normal! ".(strlen(b:bl) + strlen(b:br))."l"
+            else
+                execute "normal! ".(strlen(b:br))."l"
+                " execute "normal! gv".(strlen(b:br))."l"
+            endif
+        else
+            if b:jl == b:il
+                execute "normal! \<ESC>".(strlen(b:bl))."l"
+            else
+                execute "normal! \<ESC>"
+            endif
         endif
     else
         execute "normal! gvOI".b:bl
