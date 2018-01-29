@@ -1,7 +1,16 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-29 08:44:02
+" Last Modified: 2018-01-29 10:34:02
 " Vim: enc=utf-8
+
+if exists("has_loaded_commenter")
+    finish
+endif
+if v:version < 700
+    echoerr "Commenter: this plugin requires vim >= 7."
+    finish
+endif
+let has_loaded_commenter = 1
 
 augroup comment
     autocmd BufEnter,BufRead,BufNewFile * :call s:setUpFormat(&filetype)
@@ -152,14 +161,16 @@ endfunctio
 " Function: s:commentV() function
 " v模式下的註解, 可多行同時註解
 " 先判斷是否已經註解, 原無註解則加上註解, 否則移除註解
-function! s:commentV()
-    if s:isComment() ==# 1
-        call s:commentVDel()
-    elseif s:isComment() ==# 0
-        call s:commentVAdd()
-    endif
-    if g:commenter_keep_select
-        execute "normal! gv"
+function! s:commentV(vmode)
+    if a:vmode ==# 'V'
+        if s:isComment() ==# 1
+            call s:commentVDel()
+        elseif s:isComment() ==# 0
+            call s:commentVAdd()
+        endif
+        if g:commenter_keep_select
+            execute "normal! gv"
+        endif
     endif
 endfunction
 
@@ -210,6 +221,6 @@ endfunctio
 function! s:setUpKeyMap()
     execute "nnoremap <silent> ".g:commenter_n_key." :<C-u>call <SID>comment()<CR>"
     execute "inoremap <silent> ".g:commenter_i_key." <ESC>:<C-u>call <SID>comment()<CR>hi"
-    execute "vnoremap <silent> ".g:commenter_v_key." :<C-u>call <SID>commentV()<CR>"
+    execute "vnoremap <silent> ".g:commenter_v_key." :<C-u>call <SID>commentV(visualmode())<CR>"
 endfunction
 call s:setUpKeyMap()
