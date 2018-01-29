@@ -216,12 +216,12 @@ endfunction
 function! s:commentVAdd()
     let i = 0
     let s:lines = line("'>") - line("'<") + 1
-    while i < s:lines
+    while i < s:lines - 1
         :call s:commentAdd()
         execute "normal! j"
         let i+=1
     endwhile
-    execute "normal! k"
+    :call s:commentAdd()
     if g:commenter_show_info
         redraw
         echohl WarningMsg
@@ -236,14 +236,14 @@ endfunction
 function! s:commentVDel()
     let i = 0
     let s:lines = line("'>") - line("'<") + 1
-    while i < s:lines
+    while i < s:lines - 1
         if s:isComment() ==# 1
             :call s:commentDel()
         endif
         execute "normal! j"
         let i+=1
     endwhile
-    execute "normal! k"
+    :call s:commentDel()
     if g:commenter_show_info
         redraw
         echohl WarningMsg
