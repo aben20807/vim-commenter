@@ -95,9 +95,9 @@ function! s:isComment()
         return -1
     endif
     let s:nowcol = col(".")
-    execute "normal \<S-^>"
+    execute "normal! \<S-^>"
     let sub = s:subString(col(".")-1, col(".")-1+strlen(s:format))
-    execute "normal 0".(s:nowcol)."lh"
+    execute "normal! 0".(s:nowcol)."lh"
     if  sub ==# s:format
         return 1
     else
@@ -125,7 +125,7 @@ endfunction
 " Function: s:commentAdd() function
 " i, n模式下的加入註解
 function! s:commentAdd()
-    execute "normal \<S-^>i".s:format."\<ESC>"
+    execute "normal! \<S-^>i".s:format."\<ESC>"
     if g:commenter_show_info
         redraw
         echohl WarningMsg
@@ -138,7 +138,7 @@ endfunction
 " Function: s:commentDel() function
 " i, n模式下的移除註解
 function! s:commentDel()
-    execute "normal \<S-^>".strlen(s:format)."x"
+    execute "normal! \<S-^>".strlen(s:format)."x"
     if g:commenter_show_info
         redraw
         echohl WarningMsg
@@ -167,10 +167,10 @@ function! s:commentVAdd()
     let s:lines = line("'>") - line("'<") + 1
     while i < s:lines
         :call s:commentAdd()
-        execute "normal j"
+        execute "normal! j"
         let i+=1
     endwhile
-    execute "normal k"
+    execute "normal! k"
     if g:commenter_show_info
         redraw
         echohl WarningMsg
@@ -189,10 +189,10 @@ function! s:commentVDel()
         if s:isComment() ==# 1
             :call s:commentDel()
         endif
-        execute "normal j"
+        execute "normal! j"
         let i+=1
     endwhile
-    execute "normal k"
+    execute "normal! k"
     if g:commenter_show_info
         redraw
         echohl WarningMsg
