@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-29 21:15:05
+" Last Modified: 2018-01-29 22:01:32
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -77,11 +77,12 @@ function! s:initVariable(var, value)
 endfunction
 
 " Section: variable initialization
-call s:initVariable("g:commenter_show_info", 1)
-call s:initVariable("g:commenter_keep_select", 0)
-call s:initVariable("g:commenter_n_key", "<M-/>")
-call s:initVariable("g:commenter_i_key", "<M-/>")
-call s:initVariable("g:commenter_v_key", "<M-/>")
+call s:initVariable("g:commenter_show_info",            1)
+call s:initVariable("g:commenter_keep_select",          0)
+call s:initVariable("g:commenter_use_block_comment",    1)
+call s:initVariable("g:commenter_n_key",                "<M-/>")
+call s:initVariable("g:commenter_i_key",                "<M-/>")
+call s:initVariable("g:commenter_v_key",                "<M-/>")
 
 
 " Function: s:subString() function
@@ -174,7 +175,7 @@ endfunctio
 " v模式下的註解, 可多行同時註解
 " 先判斷是否已經註解, 原無註解則加上註解, 否則移除註解
 function! s:commentV(vmode)
-    if a:vmode ==# 'V' || b:isOnlyLineComment
+    if a:vmode ==# 'V' || b:isOnlyLineComment || !g:commenter_use_block_comment
         if s:isComment() ==# 1
             call s:commentVDel()
         elseif s:isComment() ==# 0

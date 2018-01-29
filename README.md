@@ -30,6 +30,10 @@ let g:commenter_v_key = "<M-/>"
 " Not keep selected part after commenting by default
 let g:commenter_keep_select = 0
 
+" Use block comment by default, if 0 then only use line comment
+" Note: when using block comment, cannot use this plugin to uncomment
+let g:commenter_use_block_comment = 1
+
 " Show the comment information by default
 let g:commenter_show_info = 1
 ```
