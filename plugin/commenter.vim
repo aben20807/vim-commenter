@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-29 22:01:32
+" Last Modified: 2018-01-29 22:47:21
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -44,18 +44,23 @@ function! s:setUpFormat(filetype)
     if !exists("b:isOnlyLineComment")
         let b:isOnlyLineComment = 0
     endif
-    if has_key(s:commentMap, ft)
+    if exists('g:commenter_custom_map') && has_key(g:commenter_custom_map, ft)
+        let b:formatMap = g:commenter_custom_map[ft]
+    elseif has_key(s:commentMap, ft)
         let b:formatMap = s:commentMap[ft]
-        for i in ['ll', 'bl', 'br']
-            if !has_key(b:formatMap, i)
-                let b:formatMap[i] = ''
-                let b:isOnlyLineComment = 1
-            endif
-        endfor
-        let b:ll = b:formatMap['ll']
-        let b:bl = b:formatMap['bl']
-        let b:br = b:formatMap['br']
     endif
+    if !exists("b:formatMap")
+        return
+    endif
+    for i in ['ll', 'bl', 'br']
+        if !has_key(b:formatMap, i)
+            let b:formatMap[i] = ''
+            let b:isOnlyLineComment = 1
+        endif
+    endfor
+    let b:ll = b:formatMap['ll']
+    let b:bl = b:formatMap['bl']
+    let b:br = b:formatMap['br']
 endfunction
 
 
