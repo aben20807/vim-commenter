@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-29 13:10:15
+" Last Modified: 2018-01-29 18:25:50
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -41,12 +41,15 @@ call s:mapMetaKey()
 "   -filetype: 檔案類型
 function! s:setUpFormat(filetype)
     let ft = a:filetype
+    if !exists("b:isOnlyLineComment")
+        let b:isOnlyLineComment = 0
+    endif
     if has_key(s:commentMap, ft)
-        " let b:ll = s:commentMap[ft]
         let b:formatMap = s:commentMap[ft]
         for i in ['ll', 'bl', 'br']
             if !has_key(b:formatMap, i)
                 let b:formatMap[i] = ''
+                let b:isOnlyLineComment = 1
             endif
         endfor
         let b:ll = b:formatMap['ll']
@@ -171,7 +174,7 @@ endfunctio
 " v模式下的註解, 可多行同時註解
 " 先判斷是否已經註解, 原無註解則加上註解, 否則移除註解
 function! s:commentV(vmode)
-    if a:vmode ==# 'V'
+    if a:vmode ==# 'V' || b:isOnlyLineComment
         if s:isComment() ==# 1
             call s:commentVDel()
         elseif s:isComment() ==# 0
