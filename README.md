@@ -15,7 +15,11 @@
 ### 2.a. Supported Languages
 + C, C++, Java, Makefile, Python, Rust, Shell script, Vim script.
 
-### 2.b. Settings
+### 2.b. Block comment
++ In v or ^v(ctrl-v) mode will use block comment
++ e.g. C: `/* comment here */`
+
+### 2.c. Settings
 ```vim
 " Use <M-/> namely Alt+/ to toggle comment in n, i, v mode by default
 " Feel free to change mapping you like
