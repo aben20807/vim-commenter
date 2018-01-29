@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-29 18:25:50
+" Last Modified: 2018-01-29 21:15:05
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -184,6 +184,7 @@ function! s:commentV(vmode)
             execute "normal! gv"
         endif
     elseif a:vmode ==# 'v'
+        " Ref: https://stackoverflow.com/q/11176159/6734174
         execute "normal! `>a".b:br
         execute "normal! `<i".b:bl
         " Ref: https://superuser.com/a/114087
@@ -193,28 +194,14 @@ function! s:commentV(vmode)
         execute "normal! o"
         let b:jl = line('.')
         let b:jc = col('.')
-        redraw
-        echohl WarningMsg
-        " echoerr "   ❖  DEBUG ❖ (".b:il.",".b:ic."), (".b:jl.",".b:jc.") "
-        echohl NONE
         if b:il > b:jl || ((b:il == b:jl) && (b:ic > b:jc))
             execute "normal! o"
-            " if b:jl == b:il
-            " else
-                " execute "normal! ".(strlen(b:br))."l"
-            " endif
         endif
-        " Ref: https://stackoverflow.com/a/32758226/6734174
-        " execute "normal! gvs".b:bl.b:br
-        " execute "normal! ".strlen(b:br)."hp"
-        " Ref: https://stackoverflow.com/q/11176159/6734174
         if g:commenter_keep_select
-            " FIXME cannot select right area
             if b:jl == b:il
                 execute "normal! ".(strlen(b:bl) + strlen(b:br))."l"
             else
                 execute "normal! ".(strlen(b:br))."l"
-                " execute "normal! gv".(strlen(b:br))."l"
             endif
         else
             if b:jl == b:il
@@ -223,7 +210,7 @@ function! s:commentV(vmode)
                 execute "normal! \<ESC>"
             endif
         endif
-    else
+    else " a:vmode ==# 'ctrl v'
         execute "normal! gvOI".b:bl
         execute "normal! gvO".strlen(b:bl)."lA".b:br."\<ESC>"
         if g:commenter_keep_select
