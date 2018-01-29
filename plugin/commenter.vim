@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-29 11:18:25
+" Last Modified: 2018-01-29 11:38:16
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -179,6 +179,12 @@ function! s:commentV(vmode)
         endif
         if g:commenter_keep_select
             execute "normal! gv"
+        endif
+    else
+        execute "normal! gvOI".b:bl
+        execute "normal! gvO".strlen(b:bl)."lA".b:br."\<ESC>"
+        if g:commenter_keep_select
+            execute "normal! gv".strlen(b:bl)."l"
         endif
     endif
 endfunction
