@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-28 22:12:48
+" Last Modified: 2018-01-29 08:44:02
 " Vim: enc=utf-8
 
 augroup comment
@@ -57,6 +57,7 @@ endfunction
 
 " Section: variable initialization
 call s:initVariable("g:commenter_show_info", 1)
+call s:initVariable("g:commenter_keep_select", 0)
 call s:initVariable("g:commenter_n_key", "<M-/>")
 call s:initVariable("g:commenter_i_key", "<M-/>")
 call s:initVariable("g:commenter_v_key", "<M-/>")
@@ -156,6 +157,9 @@ function! s:commentV()
         call s:commentVDel()
     elseif s:isComment() ==# 0
         call s:commentVAdd()
+    endif
+    if g:commenter_keep_select
+        execute "normal! gv"
     endif
 endfunction
 
