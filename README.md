@@ -23,6 +23,9 @@ let g:commenter_n_key = "<M-/>"
 let g:commenter_i_key = "<M-/>"
 let g:commenter_v_key = "<M-/>"
 
+" Not keep selected part after commenting by default
+let g:commenter_keep_select = 0
+
 " Show the comment information by default
 let g:commenter_show_info = 1
 ```
