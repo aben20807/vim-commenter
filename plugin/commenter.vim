@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-29 11:38:16
+" Last Modified: 2018-01-29 13:10:15
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -180,11 +180,29 @@ function! s:commentV(vmode)
         if g:commenter_keep_select
             execute "normal! gv"
         endif
+    elseif a:vmode ==# 'v'
+        " execute "normal! gv"
+        " let b:il = line('.')
+        " let b:ic = col('.')
+        " execute "normal! o"
+        " let b:jl = line('.')
+        " let b:jc = col('.')
+        " let b:isAtEnd = (b:jl > b:il) || (b:jl == b:il) && (b:jc > b:ic)
+        " Ref: https://stackoverflow.com/a/32758226/6734174
+        " execute "normal! gvs".b:bl.b:br
+        " execute "normal! ".strlen(b:br)."hp"
+        " Ref: https://stackoverflow.com/q/11176159/6734174
+        execute "normal! `>a".b:br
+        execute "normal! `<i".b:bl
+        if g:commenter_keep_select
+            " FIXME cannot select right area
+            " execute "normal! gv".(strlen(b:bl) + strlen(b:br))."l"
+        endif
     else
         execute "normal! gvOI".b:bl
         execute "normal! gvO".strlen(b:bl)."lA".b:br."\<ESC>"
         if g:commenter_keep_select
-            execute "normal! gv".strlen(b:bl)."l"
+            execute "normal! gv".strlen(b:br)."l"
         endif
     endif
 endfunction
