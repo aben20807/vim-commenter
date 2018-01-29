@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-29 10:34:02
+" Last Modified: 2018-01-29 11:18:25
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -17,14 +17,14 @@ augroup comment
 augroup END
 
 let s:commentMap = {
-            \ 'c':      '// '   ,
-            \ 'cpp':    '// '   ,
-            \ 'java':   '// '   ,
-            \ 'make':   '# '    ,
-            \ 'python': '# '    ,
-            \ 'rust':   '// '   ,
-            \ 'sh':     '# '    ,
-            \ 'vim':    '" '
+            \ 'c':      { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+            \ 'cpp':    { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+            \ 'java':   { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+            \ 'make':   { 'll': '# '                            },
+            \ 'python': { 'll': '# '                            },
+            \ 'rust':   { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+            \ 'sh':     { 'll': '# '                            },
+            \ 'vim':    { 'll': '" '                            }
             \ }
 
 " Function: s:mapMetaKey() function
@@ -42,7 +42,16 @@ call s:mapMetaKey()
 function! s:setUpFormat(filetype)
     let ft = a:filetype
     if has_key(s:commentMap, ft)
-        let s:format = s:commentMap[ft]
+        " let b:ll = s:commentMap[ft]
+        let b:formatMap = s:commentMap[ft]
+        for i in ['ll', 'bl', 'br']
+            if !has_key(b:formatMap, i)
+                let b:formatMap[i] = ''
+            endif
+        endfor
+        let b:ll = b:formatMap['ll']
+        let b:bl = b:formatMap['bl']
+        let b:br = b:formatMap['br']
     endif
 endfunction
 
@@ -95,7 +104,7 @@ endfunction
 " Return:
 "   -1代表前方有註解符號, 否則回傳0, -1代表沒有設定則不給註解
 function! s:isComment()
-    if !exists("s:format")
+    if !exists("b:formatMap")
         if g:commenter_show_info
             redraw
             echohl WarningMsg
@@ -106,9 +115,9 @@ function! s:isComment()
     endif
     let s:nowcol = col(".")
     execute "normal! \<S-^>"
-    let sub = s:subString(col(".")-1, col(".")-1+strlen(s:format))
+    let sub = s:subString(col(".")-1, col(".")-1+strlen(b:ll))
     execute "normal! 0".(s:nowcol)."lh"
-    if  sub ==# s:format
+    if  sub ==# b:ll
         return 1
     else
         return 0
@@ -124,10 +133,10 @@ function! s:comment()
     let b:curline = line(".")
     if s:isComment() ==# 1
         call s:commentDel()
-        call cursor(b:curline, b:curcol - strlen(s:format))
+        call cursor(b:curline, b:curcol - strlen(b:ll))
     elseif s:isComment() ==# 0
         call s:commentAdd()
-        call cursor(b:curline, b:curcol + strlen(s:format))
+        call cursor(b:curline, b:curcol + strlen(b:ll))
     endif
 endfunction
 
@@ -135,7 +144,7 @@ endfunction
 " Function: s:commentAdd() function
 " i, n模式下的加入註解
 function! s:commentAdd()
-    execute "normal! \<S-^>i".s:format."\<ESC>"
+    execute "normal! \<S-^>i".b:ll."\<ESC>"
     if g:commenter_show_info
         redraw
         echohl WarningMsg
@@ -148,7 +157,7 @@ endfunction
 " Function: s:commentDel() function
 " i, n模式下的移除註解
 function! s:commentDel()
-    execute "normal! \<S-^>".strlen(s:format)."x"
+    execute "normal! \<S-^>".strlen(b:ll)."x"
     if g:commenter_show_info
         redraw
         echohl WarningMsg
