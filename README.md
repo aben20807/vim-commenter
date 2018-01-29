@@ -34,6 +34,11 @@ let g:commenter_keep_select = 0
 " Note: when using block comment, cannot use this plugin to uncomment
 let g:commenter_use_block_comment = 1
 
+" Custom comment map by setting g:commenter_custom_map, not setting by default
+" ll: line comment left, bl: block comment left, br: block comment right
+" e.g.
+let g:commenter_custom_map = {'c':{ 'll': '// ouo ', 'bl': '/* ', 'br': ' */' }}
+
 " Show the comment information by default
 let g:commenter_show_info = 1
 ```

@@ -82,12 +82,12 @@ function! s:initVariable(var, value)
 endfunction
 
 " Section: variable initialization
-call s:initVariable("g:commenter_show_info",            1)
-call s:initVariable("g:commenter_keep_select",          0)
-call s:initVariable("g:commenter_use_block_comment",    1)
 call s:initVariable("g:commenter_n_key",                "<M-/>")
 call s:initVariable("g:commenter_i_key",                "<M-/>")
 call s:initVariable("g:commenter_v_key",                "<M-/>")
+call s:initVariable("g:commenter_keep_select",          0)
+call s:initVariable("g:commenter_use_block_comment",    1)
+call s:initVariable("g:commenter_show_info",            1)
 
 
 " Function: s:subString() function
