@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-30 11:23:15
+" Last Modified: 2018-01-30 12:35:53
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -125,7 +125,8 @@ function! s:isComment()
     if exists('b:ll') && b:ll !=# ''
         let s:nowcol = col(".")
         execute "normal! \<S-^>"
-        let sub = s:subString(col(".")-1, col(".")-1+strlen(b:ll))
+        " let sub = s:subString(col(".")-1, col(".")-1+strlen(b:ll))
+        let sub = strpart(getline("."), col(".") - 1, strlen(b:ll))
         execute "normal! 0".(s:nowcol)."lh"
         if sub ==# b:ll
             return 1
