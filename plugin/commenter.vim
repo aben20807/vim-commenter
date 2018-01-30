@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-30 12:35:53
+" Last Modified: 2018-01-30 12:43:51
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -90,23 +90,6 @@ call s:initVariable("g:commenter_use_block_comment",    1)
 call s:initVariable("g:commenter_show_info",            1)
 
 
-" Function: s:subString() function
-" 用於提出整行的子字串, 長度根據註解格式長度
-"
-" Return:
-"   -result:裁減完成的子字串
-function! s:subString(from, to)
-    let currentLine = getline(".")
-    let i = a:from
-    let result = ""
-    while i < a:to
-        let result .= currentLine[i]
-        let i+=1
-    endwhile
-    return result
-endfunction
-
-
 " Function: s:isComment() function
 " 用於判斷游標所在行是否已經註解
 "
@@ -125,7 +108,6 @@ function! s:isComment()
     if exists('b:ll') && b:ll !=# ''
         let s:nowcol = col(".")
         execute "normal! \<S-^>"
-        " let sub = s:subString(col(".")-1, col(".")-1+strlen(b:ll))
         let sub = strpart(getline("."), col(".") - 1, strlen(b:ll))
         execute "normal! 0".(s:nowcol)."lh"
         if sub ==# b:ll
