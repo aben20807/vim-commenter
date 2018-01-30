@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-29 22:47:21
+" Last Modified: 2018-01-30 11:02:53
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -126,7 +126,7 @@ function! s:isComment()
     execute "normal! \<S-^>"
     let sub = s:subString(col(".")-1, col(".")-1+strlen(b:ll))
     execute "normal! 0".(s:nowcol)."lh"
-    if  sub ==# b:ll
+    if  b:ll !=# '' && sub ==# b:ll
         return 1
     else
         return 0
@@ -145,7 +145,11 @@ function! s:comment()
         call cursor(b:curline, b:curcol - strlen(b:ll))
     elseif s:isComment() ==# 0
         call s:commentAdd()
-        call cursor(b:curline, b:curcol + strlen(b:ll))
+        if exists('b:ll') && b:ll !=# ''
+            call cursor(b:curline, b:curcol + strlen(b:ll))
+        else
+            call cursor(b:curline, b:curcol + strlen(b:bl))
+        endif
     endif
 endfunction
 
@@ -153,7 +157,13 @@ endfunction
 " Function: s:commentAdd() function
 " i, n模式下的加入註解
 function! s:commentAdd()
-    execute "normal! \<S-^>i".b:ll."\<ESC>"
+    if exists('b:ll') && b:ll !=# ''
+        execute "normal! \<S-^>i".b:ll."\<ESC>"
+    else
+        execute "normal! \<S-^>v\<S-$>h\<ESC>"
+        execute "normal! `>a".b:br
+        execute "normal! `<i".b:bl."\<ESC>"
+    endif
     if g:commenter_show_info
         redraw
         echohl WarningMsg
