@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-31 13:23:37
+" Last Modified: 2018-01-31 13:28:11
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -13,7 +13,7 @@ endif
 let has_loaded_commenter = 1
 
 augroup comment
-    autocmd BufEnter,BufRead,BufNewFile * :call s:setUpFormat(&filetype)
+    autocmd BufEnter,BufRead,BufNewFile * call s:setUpFormat(&filetype)
 augroup END
 
 let s:commentMap = {
@@ -121,9 +121,9 @@ function! s:isComment()
     if exists('b:ll') && b:ll !=# ''
         let s:nowcol = col(".")
         execute "normal! \<S-^>"
-        let sub = strpart(getline("."), col(".") - 1, strlen(b:ll))
+        let b:sub = strpart(getline("."), col(".") - 1, strlen(b:ll))
         execute "normal! 0".(s:nowcol)."lh"
-        if sub ==# b:ll
+        if b:sub ==# b:ll
             return 1
         else
             if s:isBlockComment()
@@ -299,11 +299,11 @@ function! s:commentVAdd()
     let i = 0
     let s:lines = line("'>") - line("'<") + 1
     while i < s:lines - 1
-        :call s:commentAdd()
+        call s:commentAdd()
         execute "normal! j"
         let i+=1
     endwhile
-    :call s:commentAdd()
+    call s:commentAdd()
 endfunction
 
 
@@ -314,12 +314,12 @@ function! s:commentVDel()
     let s:lines = line("'>") - line("'<") + 1
     while i < s:lines - 1
         if s:isComment() ==# 1
-            :call s:commentDel()
+            call s:commentDel()
         endif
         execute "normal! j"
         let i+=1
     endwhile
-    :call s:commentDel()
+    call s:commentDel()
     call s:show_info("   ❖  移除註解 ❖ ")
 endfunctio
 
