@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-31 12:31:33
+" Last Modified: 2018-01-31 12:43:02
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -116,10 +116,6 @@ function! s:isComment()
             return 1
         else
             if s:isBlockComment()
-                redraw
-                echohl WarningMsg
-                echo "   ❖  block comment ❖ "
-                echohl NONE
                 return 2
             else
                 return 0
@@ -255,16 +251,20 @@ endfunction
 " v模式下的註解, 可多行同時註解
 " 先判斷是否已經註解, 原無註解則加上註解, 否則移除註解
 function! s:commentV(vmode)
+    let b:isInComment = s:isComment()
     if a:vmode ==# 'V' || b:isOnlyLineComment || !g:commenter_use_block_comment
-        if s:isComment() ==# 1
+        if b:isInComment ==# 1
             call s:commentVDel()
-        elseif s:isComment() ==# 0
+        elseif b:isInComment ==# 0
             call s:commentVAdd()
         endif
         if g:commenter_keep_select
             execute "normal! gv"
         endif
     elseif a:vmode ==# 'v'
+        if b:isInComment ==# 2
+            return
+        endif
         " Ref: https://stackoverflow.com/q/11176159/6734174
         execute "normal! `>a".b:br
         execute "normal! `<i".b:bl
@@ -292,6 +292,9 @@ function! s:commentV(vmode)
             endif
         endif
     else " a:vmode ==# 'ctrl v'
+        if b:isInComment ==# 2
+            return
+        endif
         execute "normal! gvOI".b:bl
         execute "normal! gvO".strlen(b:bl)."lA".b:br."\<ESC>"
         if g:commenter_keep_select
@@ -318,12 +321,6 @@ function! s:commentVAdd()
         let i+=1
     endwhile
     :call s:commentAdd()
-    " if g:commenter_show_info
-        " redraw
-        " echohl WarningMsg
-        " echo "   ❖  加入註解 ❖ "
-        " echohl NONE
-    " endif
 endfunction
 
 
