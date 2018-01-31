@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-30 12:43:51
+" Last Modified: 2018-01-31 11:18:04
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -43,6 +43,8 @@ function! s:setUpFormat(filetype)
     let ft = a:filetype
     if !exists("b:isOnlyLineComment")
         let b:isOnlyLineComment = 0
+    else
+        return
     endif
     if exists('g:commenter_custom_map') && has_key(g:commenter_custom_map, ft)
         let b:formatMap = g:commenter_custom_map[ft]
@@ -61,6 +63,8 @@ function! s:setUpFormat(filetype)
     let b:ll = b:formatMap['ll']
     let b:bl = b:formatMap['bl']
     let b:br = b:formatMap['br']
+    " Ref: http://vimdoc.sourceforge.net/htmldoc/eval.html#search()
+    " echoerr search('\M'.b:bl, 'bnW', 0)
 endfunction
 
 
