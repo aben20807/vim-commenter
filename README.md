@@ -44,7 +44,7 @@ let g:commenter_allow_nest_block = 0
 " Custom comment map by setting g:commenter_custom_map, not setting by default.
 " ll: line comment left, bl: block comment left, br: block comment right.
 " e.g.
-let g:commenter_custom_map = {'c': { 'll': '// ouo ', 'bl': '/* ', 'br': ' */' }}
+let g:commenter_custom_map = {'html': { 'll': '', 'bl': '<!-- ', 'br': ' -->' }}
 
 
 " Show the comment information by default.
