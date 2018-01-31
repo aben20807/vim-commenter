@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-31 12:43:02
+" Last Modified: 2018-01-31 13:03:49
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -89,6 +89,7 @@ call s:initVariable("g:commenter_i_key",                "<M-/>")
 call s:initVariable("g:commenter_v_key",                "<M-/>")
 call s:initVariable("g:commenter_keep_select",          0)
 call s:initVariable("g:commenter_use_block_comment",    1)
+call s:initVariable("g:commenter_allow_nest_block",     0)
 call s:initVariable("g:commenter_show_info",            1)
 
 
@@ -150,8 +151,6 @@ function! s:isBlockComment()
         " Ref: http://vimdoc.sourceforge.net/htmldoc/eval.html#search()
         let b:lastbr = searchpos('\M'.b:br, 'bnW', 0)
         let b:lastbl = searchpos('\M'.b:bl, 'bnW', 0)
-        " echoerr "br".string(b:lastbr)
-        " echoerr "bl".string(b:lastbl)
         if b:lastbl == [0, 0]
             return 0
         endif
@@ -160,8 +159,6 @@ function! s:isBlockComment()
                     \(b:lastbl[0] == b:lastbr[0] && b:lastbl[1] > b:lastbr[1])
         let b:nextbr = searchpos('\M'.b:br, 'nW', line("$"))
         let b:nextbl = searchpos('\M'.b:bl, 'nW', line("$"))
-        " echoerr string(b:nextbr)
-        " echoerr string(b:nextbl)
         if b:nextbr == [0, 0]
             return 0
         endif
@@ -262,7 +259,7 @@ function! s:commentV(vmode)
             execute "normal! gv"
         endif
     elseif a:vmode ==# 'v'
-        if b:isInComment ==# 2
+        if b:isInComment ==# 2 && !g:commenter_allow_nest_block
             return
         endif
         " Ref: https://stackoverflow.com/q/11176159/6734174
@@ -291,8 +288,14 @@ function! s:commentV(vmode)
                 execute "normal! \<ESC>"
             endif
         endif
+        if g:commenter_show_info
+            redraw
+            echohl WarningMsg
+            echo "   ❖  加入區塊註解 ❖ "
+            echohl NONE
+        endif
     else " a:vmode ==# 'ctrl v'
-        if b:isInComment ==# 2
+        if b:isInComment ==# 2 && !g:commenter_allow_nest_block
             return
         endif
         execute "normal! gvOI".b:bl
@@ -300,12 +303,12 @@ function! s:commentV(vmode)
         if g:commenter_keep_select
             execute "normal! gv".strlen(b:br)."l"
         endif
-    endif
-    if g:commenter_show_info
-        redraw
-        echohl WarningMsg
-        echo "   ❖  加入區塊註解 ❖ "
-        echohl NONE
+        if g:commenter_show_info
+            redraw
+            echohl WarningMsg
+            echo "   ❖  加入區塊註解 ❖ "
+            echohl NONE
+        endif
     endif
 endfunction
 
