@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-31 13:28:11
+" Last Modified: 2018-01-31 17:16:40
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -223,13 +223,10 @@ endfunction
 " Function: s:blockCommentDel() function
 " i, n模式下的移除block註解
 function! s:blockCommentDel()
+    call cursor(b:nextbr)
+    execute "normal! ".strlen(b:br)."x"
     call cursor(b:lastbl)
     execute "normal! ".strlen(b:bl)."x"
-    call cursor(b:nextbr)
-    if b:lastbl[0] == b:nextbr[0]
-        execute "normal! ".strlen(b:bl)."h"
-    endif
-    execute "normal! ".strlen(b:br)."x"
     call s:show_info("   ❖  移除區塊註解 ❖ ")
 endfunction
 
