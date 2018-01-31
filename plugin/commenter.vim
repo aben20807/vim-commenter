@@ -63,8 +63,6 @@ function! s:setUpFormat(filetype)
     let b:ll = b:formatMap['ll']
     let b:bl = b:formatMap['bl']
     let b:br = b:formatMap['br']
-    " Ref: http://vimdoc.sourceforge.net/htmldoc/eval.html#search()
-    " echoerr search('\M'.b:bl, 'bnW', 0)
 endfunction
 
 
@@ -98,7 +96,7 @@ call s:initVariable("g:commenter_show_info",            1)
 " 用於判斷游標所在行是否已經註解
 "
 " Return:
-"   -1代表前方有註解符號, 否則回傳0, -1代表沒有設定則不給註解
+"   -2代表在block註解內, 1代表前方有註解符號, 否則回傳0, -1代表沒有設定則不給註解
 function! s:isComment()
     if !exists("b:formatMap")
         if g:commenter_show_info
@@ -117,10 +115,64 @@ function! s:isComment()
         if sub ==# b:ll
             return 1
         else
-            return 0
+            if s:isBlockComment()
+                redraw
+                echohl WarningMsg
+                echo "   ❖  block comment ❖ "
+                echohl NONE
+                return 2
+            else
+                return 0
+            endif
         endif
     else
-        return 0
+        if s:isBlockComment()
+            return 2
+        else
+            return 0
+        endif
+    endif
+endfunction
+
+
+" Function: s:isBlockComment() function
+" 用於判斷游標所在行是否已經註解
+"
+" Return:
+"   -1代表有註解, 否則回傳0, -1代表沒有設定則不給註解
+function! s:isBlockComment()
+    if !exists("b:formatMap")
+        if g:commenter_show_info
+            redraw
+            echohl WarningMsg
+            echo "   ❖  無設定註解格式 ❖ "
+            echohl NONE
+        endif
+        return -1
+    endif
+    if exists('b:bl') && b:bl !=# '' && exists('b:br') && b:br !=# ''
+        " Ref: http://vimdoc.sourceforge.net/htmldoc/eval.html#search()
+        let b:lastbr = searchpos('\M'.b:br, 'bnW', 0)
+        let b:lastbl = searchpos('\M'.b:bl, 'bnW', 0)
+        " echoerr "br".string(b:lastbr)
+        " echoerr "bl".string(b:lastbl)
+        if b:lastbl == [0, 0]
+            return 0
+        endif
+        let b:isInbl = b:lastbr == [0, 0] ||
+                    \b:lastbl[0] > b:lastbr[0] ||
+                    \(b:lastbl[0] == b:lastbr[0] && b:lastbl[1] > b:lastbr[1])
+        let b:nextbr = searchpos('\M'.b:br, 'nW', line("$"))
+        let b:nextbl = searchpos('\M'.b:bl, 'nW', line("$"))
+        " echoerr string(b:nextbr)
+        " echoerr string(b:nextbl)
+        if b:nextbr == [0, 0]
+            return 0
+        endif
+        let b:isInbr = b:nextbl == [0, 0] ||
+                    \b:nextbl[0] > b:nextbr[0] ||
+                    \(b:nextbl[0] == b:nextbr[0] && b:nextbl[1] > b:nextbr[1])
+        return b:isInbl && b:isInbr
     endif
 endfunction
 
