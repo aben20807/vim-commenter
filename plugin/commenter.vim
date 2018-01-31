@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-31 13:03:49
+" Last Modified: 2018-01-31 13:23:37
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -93,6 +93,21 @@ call s:initVariable("g:commenter_allow_nest_block",     0)
 call s:initVariable("g:commenter_show_info",            1)
 
 
+" Function: s:show_info(str) function
+" 印出字串用
+"
+" Args:
+"   -str: 要印出的字串
+function! s:show_info(str)
+    if g:commenter_show_info
+        redraw
+        echohl WarningMsg
+        echo a:str
+        echohl NONE
+    endif
+endfunction
+
+
 " Function: s:isComment() function
 " 用於判斷游標所在行是否已經註解
 "
@@ -100,12 +115,7 @@ call s:initVariable("g:commenter_show_info",            1)
 "   -2代表在block註解內, 1代表前方有註解符號, 否則回傳0, -1代表沒有設定則不給註解
 function! s:isComment()
     if !exists("b:formatMap")
-        if g:commenter_show_info
-            redraw
-            echohl WarningMsg
-            echo "   ❖  無設定註解格式 ❖ "
-            echohl NONE
-        endif
+        call s:show_info("   ❖  無設定註解格式 ❖ ")
         return -1
     endif
     if exists('b:ll') && b:ll !=# ''
@@ -139,12 +149,7 @@ endfunction
 "   -1代表有註解, 否則回傳0, -1代表沒有設定則不給註解
 function! s:isBlockComment()
     if !exists("b:formatMap")
-        if g:commenter_show_info
-            redraw
-            echohl WarningMsg
-            echo "   ❖  無設定註解格式 ❖ "
-            echohl NONE
-        endif
+        call s:show_info("   ❖  無設定註解格式 ❖ ")
         return -1
     endif
     if exists('b:bl') && b:bl !=# '' && exists('b:br') && b:br !=# ''
@@ -203,12 +208,7 @@ function! s:commentAdd()
         execute "normal! `>a".b:br
         execute "normal! `<i".b:bl."\<ESC>"
     endif
-    if g:commenter_show_info
-        redraw
-        echohl WarningMsg
-        echo "   ❖  加入註解 ❖ "
-        echohl NONE
-    endif
+    call s:show_info("   ❖  加入註解 ❖ ")
 endfunction
 
 
@@ -216,12 +216,7 @@ endfunction
 " i, n模式下的移除註解
 function! s:commentDel()
     execute "normal! \<S-^>".strlen(b:ll)."x"
-    if g:commenter_show_info
-        redraw
-        echohl WarningMsg
-        echo "   ❖  移除註解 ❖ "
-        echohl NONE
-    endif
+    call s:show_info("   ❖  移除註解 ❖ ")
 endfunction
 
 
@@ -235,12 +230,7 @@ function! s:blockCommentDel()
         execute "normal! ".strlen(b:bl)."h"
     endif
     execute "normal! ".strlen(b:br)."x"
-    if g:commenter_show_info
-        redraw
-        echohl WarningMsg
-        echo "   ❖  移除區塊註解 ❖ "
-        echohl NONE
-    endif
+    call s:show_info("   ❖  移除區塊註解 ❖ ")
 endfunction
 
 
@@ -288,12 +278,7 @@ function! s:commentV(vmode)
                 execute "normal! \<ESC>"
             endif
         endif
-        if g:commenter_show_info
-            redraw
-            echohl WarningMsg
-            echo "   ❖  加入區塊註解 ❖ "
-            echohl NONE
-        endif
+        call s:show_info("   ❖  加入區塊註解 ❖ ")
     else " a:vmode ==# 'ctrl v'
         if b:isInComment ==# 2 && !g:commenter_allow_nest_block
             return
@@ -303,12 +288,7 @@ function! s:commentV(vmode)
         if g:commenter_keep_select
             execute "normal! gv".strlen(b:br)."l"
         endif
-        if g:commenter_show_info
-            redraw
-            echohl WarningMsg
-            echo "   ❖  加入區塊註解 ❖ "
-            echohl NONE
-        endif
+        call s:show_info("   ❖  加入區塊註解 ❖ ")
     endif
 endfunction
 
@@ -340,12 +320,7 @@ function! s:commentVDel()
         let i+=1
     endwhile
     :call s:commentDel()
-    if g:commenter_show_info
-        redraw
-        echohl WarningMsg
-        echo "   ❖  移除註解 ❖ "
-        echohl NONE
-    endif
+    call s:show_info("   ❖  移除註解 ❖ ")
 endfunctio
 
 
