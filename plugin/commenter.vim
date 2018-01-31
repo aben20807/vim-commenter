@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-31 11:18:04
+" Last Modified: 2018-01-31 12:31:33
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -183,10 +183,13 @@ endfunction
 function! s:comment()
     let b:curcol = col(".")
     let b:curline = line(".")
-    if s:isComment() ==# 1
+    let b:isInComment = s:isComment()
+    if b:isInComment ==# 2
+        call s:blockCommentDel()
+    elseif b:isInComment ==# 1
         call s:commentDel()
         call cursor(b:curline, b:curcol - strlen(b:ll))
-    elseif s:isComment() ==# 0
+    elseif b:isInComment ==# 0
         call s:commentAdd()
         if exists('b:ll') && b:ll !=# ''
             call cursor(b:curline, b:curcol + strlen(b:ll))
@@ -226,7 +229,26 @@ function! s:commentDel()
         echo "   ❖  移除註解 ❖ "
         echohl NONE
     endif
-endfunctio
+endfunction
+
+
+" Function: s:blockCommentDel() function
+" i, n模式下的移除block註解
+function! s:blockCommentDel()
+    call cursor(b:lastbl)
+    execute "normal! ".strlen(b:bl)."x"
+    call cursor(b:nextbr)
+    if b:lastbl[0] == b:nextbr[0]
+        execute "normal! ".strlen(b:bl)."h"
+    endif
+    execute "normal! ".strlen(b:br)."x"
+    if g:commenter_show_info
+        redraw
+        echohl WarningMsg
+        echo "   ❖  移除區塊註解 ❖ "
+        echohl NONE
+    endif
+endfunction
 
 
 " Function: s:commentV() function
@@ -276,6 +298,12 @@ function! s:commentV(vmode)
             execute "normal! gv".strlen(b:br)."l"
         endif
     endif
+    if g:commenter_show_info
+        redraw
+        echohl WarningMsg
+        echo "   ❖  加入區塊註解 ❖ "
+        echohl NONE
+    endif
 endfunction
 
 
@@ -290,12 +318,12 @@ function! s:commentVAdd()
         let i+=1
     endwhile
     :call s:commentAdd()
-    if g:commenter_show_info
-        redraw
-        echohl WarningMsg
-        echo "   ❖  加入註解 ❖ "
-        echohl NONE
-    endif
+    " if g:commenter_show_info
+        " redraw
+        " echohl WarningMsg
+        " echo "   ❖  加入註解 ❖ "
+        " echohl NONE
+    " endif
 endfunction
 
 
