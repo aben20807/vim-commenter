@@ -1,0 +1,43 @@
+*commenter.txt*   easily comment code.
+
+                                                   _
+           ___ ___  _ __ ___  _ __ ___   ___ _ __ | |_ ___ _ __
+          / __/ _ \| '_ ` _ \| '_ ` _ \ / _ \ '_ \| __/ _ \ '__|
+         | (_| (_) | | | | | | | | | | |  __/ | | | ||  __/ |
+          \___\___/|_| |_| |_|_| |_| |_|\___|_| |_|\__\___|_|
+
+        A simple Vim plugin which uses <alt+/> to comment code.
+
+==============================================================================
+CONTENTS                                                  *commenter-contents*
+  1. Usage .............................. |commenter_usage|
+  2. Mappings ........................... |commenter_mappings|
+    2.1 commenter_n_key ................. |mapping_commenter_n_key|
+    2.2 commenter_i_key ................. |mapping_commenter_i_key|
+    2.3 commenter_v_key ................. |mapping_commenter_v_key|
+  3. Configuration ...................... |commenter_configuration|
+    3.1 g:commenter_n_key ............... |config_commenter_n_key|
+    3.2 g:commenter_i_key ............... |config_commenter_i_key|
+    3.3 g:commenter_v_key ............... |config_commenter_v_key|
+    3.4 g:commenter_keep_select ......... |config_commenter_keep_select|
+    3.5 g:commenter_use_block_comment ... |config_commenter_use_block_comment|
+    3.6 g:commenter_allow_nest_block .... |config_commenter_allow_nest_block|
+    3.7 g:commenter_custom_map .......... |config_commenter_custom_map|
+    3.8 g:commenter_show_info ........... |config_commenter_show_info|
+  4. License ............................ |commenter_license|
+==============================================================================
+1. Usage                                                     *commenter_usage*
+2. Mappings                                               *commenter_mappings*
+2.1 commenter_n_key                                  *mapping_commenter_n_key*
+2.2 commenter_i_key                                  *mapping_commenter_i_key*
+2.3 commenter_v_key                                  *mapping_commenter_v_key*
+3. Configuration                                     *commenter_configuration*
+3.1 g:commenter_n_key                                 *config_commenter_n_key*
+3.2 g:commenter_i_key                                 *config_commenter_i_key*
+3.3 g:commenter_v_key                                 *config_commenter_v_key*
+3.4 g:commenter_keep_select                     *config_commenter_keep_select*
+3.5 g:commenter_use_block_comment         *config_commenter_use_block_comment*
+3.6 g:commenter_allow_nest_block           *config_commenter_allow_nest_block*
+3.7 g:commenter_custom_map                       *config_commenter_custom_map*
+3.8 g:commenter_show_info                         *config_commenter_show_info*
+4. License                                                 *commenter_license*
