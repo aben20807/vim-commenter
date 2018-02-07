@@ -21,6 +21,10 @@
 
 ### 2.c. Settings
 ```vim
+" Use key mappings setting from this plugin by default.
+let g:commenter_use_default_mapping = 1
+
+
 " Use <M-/> namely Alt+/ to toggle comment in n, i, v mode by default.
 " Feel free to change mapping you like.
 let g:commenter_n_key = "<M-/>"

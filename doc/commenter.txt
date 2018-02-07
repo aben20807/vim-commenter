@@ -11,22 +11,23 @@
 
 ==============================================================================
 CONTENTS                                                  *commenter-contents*
-  1. Usage .............................. |commenter_usage|
-  2. Mappings ........................... |commenter_mappings|
-    2.1 commenter_n_key ................. |mapping_commenter_n_key|
-    2.2 commenter_i_key ................. |mapping_commenter_i_key|
-    2.3 commenter_v_key ................. |mapping_commenter_v_key|
-  3. Configuration ...................... |commenter_configuration|
-    3.1 g:commenter_n_key ............... |config_commenter_n_key|
-    3.2 g:commenter_i_key ............... |config_commenter_i_key|
-    3.3 g:commenter_v_key ............... |config_commenter_v_key|
-    3.4 g:commenter_keep_select ......... |config_commenter_keep_select|
-    3.5 g:commenter_use_block_comment ... |config_commenter_use_block_comment|
-    3.6 g:commenter_allow_nest_block .... |config_commenter_allow_nest_block|
-    3.7 g:commenter_custom_map .......... |config_commenter_custom_map|
-    3.8 g:commenter_show_info ........... |config_commenter_show_info|
-  4. License ............................ |commenter_license|
-  5. Bugs ............................... |commenter_bugs|
+ 1. Usage ............................. |commenter_usage|
+ 2. Mappings .......................... |commenter_mappings|
+  2.1 commenter_n_key ................. |mapping_commenter_n_key|
+  2.2 commenter_i_key ................. |mapping_commenter_i_key|
+  2.3 commenter_v_key ................. |mapping_commenter_v_key|
+ 3. Configuration ..................... |commenter_configuration|
+  3.1 g:commenter_use_default_mapping . |config_commenter_use_default_mapping|
+  3.2 g:commenter_n_key ............... |config_commenter_n_key|
+  3.3 g:commenter_i_key ............... |config_commenter_i_key|
+  3.4 g:commenter_v_key ............... |config_commenter_v_key|
+  3.5 g:commenter_keep_select ......... |config_commenter_keep_select|
+  3.6 g:commenter_use_block_comment ... |config_commenter_use_block_comment|
+  3.7 g:commenter_allow_nest_block .... |config_commenter_allow_nest_block|
+  3.8 g:commenter_custom_map .......... |config_commenter_custom_map|
+  3.9 g:commenter_show_info ........... |config_commenter_show_info|
+ 4. License ........................... |commenter_license|
+ 5. Bugs .............................. |commenter_bugs|
 
 ==============================================================================
 1. Usage                                                     *commenter_usage*
@@ -66,7 +67,16 @@ Same as 2.1.
 You can configure the following settings.
 
 ------------------------------------------------------------------------------
-3.1 g:commenter_n_key                                 *config_commenter_n_key*
+3.1 g:commenter_use_default_mapping     *config_commenter_use_default_mapping*
+
+Set this to 0 to not use default mappings. >
+    let g:commenter_use_default_mapping = 0
+<
+
+Default: 1 (Enable default mappings)
+
+------------------------------------------------------------------------------
+3.2 g:commenter_n_key                                 *config_commenter_n_key*
 
 Change key mapping which comment code in normal mode.
 You can set it to Ctrl+c >
@@ -76,17 +86,17 @@ You can set it to Ctrl+c >
 Default: "<M-/>"
 
 ------------------------------------------------------------------------------
-3.2 g:commenter_i_key                                 *config_commenter_i_key*
+3.3 g:commenter_i_key                                 *config_commenter_i_key*
 
-Same as 3.1.
-
-------------------------------------------------------------------------------
-3.3 g:commenter_v_key                                 *config_commenter_v_key*
-
-Same as 3.1.
+Same as 3.2.
 
 ------------------------------------------------------------------------------
-3.4 g:commenter_keep_select                     *config_commenter_keep_select*
+3.4 g:commenter_v_key                                 *config_commenter_v_key*
+
+Same as 3.2.
+
+------------------------------------------------------------------------------
+3.5 g:commenter_keep_select                     *config_commenter_keep_select*
 
 Set this to 1 to keep selected text(include comment symbols) in visual mode. >
     let g:commenter_keep_select = 1
@@ -95,7 +105,7 @@ Set this to 1 to keep selected text(include comment symbols) in visual mode. >
 Default: 0 (not keep selected text)
 
 ------------------------------------------------------------------------------
-3.5 g:commenter_use_block_comment         *config_commenter_use_block_comment*
+3.6 g:commenter_use_block_comment         *config_commenter_use_block_comment*
 
 Set this to 0 to not use block comment, namely just use line comment. >
     let g:commenter_use_block_comment = 0
@@ -104,7 +114,7 @@ Set this to 0 to not use block comment, namely just use line comment. >
 Default: 1 (Enable block comment)
 
 ------------------------------------------------------------------------------
-3.6 g:commenter_allow_nest_block           *config_commenter_allow_nest_block*
+3.7 g:commenter_allow_nest_block           *config_commenter_allow_nest_block*
 
 Nested block comment. e.g. Rust support >
     /*
@@ -119,7 +129,7 @@ Set this to 1 to allow nested block comment. >
 Default: 0 (Not allow nested block comment)
 
 ------------------------------------------------------------------------------
-3.7 g:commenter_custom_map                       *config_commenter_custom_map*
+3.8 g:commenter_custom_map                       *config_commenter_custom_map*
 
 Custom comment symbols if it not exist or you don't like default setting. >
     let g:commenter_custom_map =
@@ -129,7 +139,7 @@ Custom comment symbols if it not exist or you don't like default setting. >
 Default: not set
 
 ------------------------------------------------------------------------------
-3.8 g:commenter_show_info                         *config_commenter_show_info*
+3.9 g:commenter_show_info                         *config_commenter_show_info*
 
 Set this to 0 to not show comment info like screenshot ❖  加入註解 ❖. >
     let g:commenter_show_info = 0

@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-01-31 17:16:40
+" Last Modified: 2018-02-07 14:11:34
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -84,6 +84,7 @@ function! s:initVariable(var, value)
 endfunction
 
 " Section: variable initialization
+call s:initVariable("g:commenter_use_default_mapping",  1)
 call s:initVariable("g:commenter_n_key",                "<M-/>")
 call s:initVariable("g:commenter_i_key",                "<M-/>")
 call s:initVariable("g:commenter_v_key",                "<M-/>")
@@ -327,4 +328,6 @@ function! s:setUpKeyMap()
     execute "inoremap <silent> ".g:commenter_i_key." <ESC>:<C-u>call <SID>comment()<CR>hi"
     execute "vnoremap <silent> ".g:commenter_v_key." :<C-u>call <SID>commentV(visualmode())<CR>"
 endfunction
-call s:setUpKeyMap()
+if g:commenter_use_default_mapping
+    call s:setUpKeyMap()
+endif
