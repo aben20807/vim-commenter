@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-02-07 14:11:34
+" Last Modified: 2018-02-08 11:42:08
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -19,6 +19,7 @@ augroup END
 let s:commentMap = {
             \ 'c':      { 'll': '// ', 'bl': '/* ', 'br': ' */' },
             \ 'cpp':    { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+            \ 'html':   { 'bl': '<!-- ', 'br': ' -->'           },
             \ 'java':   { 'll': '// ', 'bl': '/* ', 'br': ' */' },
             \ 'make':   { 'll': '# '                            },
             \ 'python': { 'll': '# '                            },
