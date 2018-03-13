@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-02-08 11:42:08
+" Last Modified: 2018-03-13 09:38:53
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -326,7 +326,7 @@ endfunctio
 " Section: key map設定
 function! s:setUpKeyMap()
     execute "nnoremap <silent> ".g:commenter_n_key." :<C-u>call <SID>comment()<CR>"
-    execute "inoremap <silent> ".g:commenter_i_key." <ESC>:<C-u>call <SID>comment()<CR>hi"
+    execute "inoremap <silent> ".g:commenter_i_key." <ESC>l:<C-u>call <SID>comment()<CR>i"
     execute "vnoremap <silent> ".g:commenter_v_key." :<C-u>call <SID>commentV(visualmode())<CR>"
 endfunction
 if g:commenter_use_default_mapping
