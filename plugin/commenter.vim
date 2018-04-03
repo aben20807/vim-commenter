@@ -25,6 +25,7 @@ let s:commentMap = {
             \ 'python': { 'll': '# '                            },
             \ 'rust':   { 'll': '// ', 'bl': '/* ', 'br': ' */' },
             \ 'sh':     { 'll': '# '                            },
+            \ 'lisp':   { 'll': '; '                            },
             \ 'vim':    { 'll': '" '                            }
             \ }
 
