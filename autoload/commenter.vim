@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-04-05 11:18:07
+" Last Modified: 2018-04-05 11:55:59
 " Vim: enc=utf-8
 
 " Section: filetype comment format
@@ -169,7 +169,8 @@ function! commenter#Comment() abort
         call commenter#CommentDel()
         call cursor(b:curline, b:curcol - strlen(b:ll))
     elseif b:isInComment ==# 0
-        call commenter#CommentAdd()
+        execute "normal! \<S-^>"
+        call commenter#CommentAdd(col('.'))
         if exists('b:ll') && b:ll !=# ''
             call cursor(b:curline, b:curcol + strlen(b:ll))
         else
@@ -181,9 +182,11 @@ endfunction
 
 " Function: commenter#CommentAdd() function
 " i, n模式下的加入註解
-function! commenter#CommentAdd() abort
+function! commenter#CommentAdd(col) abort
     if exists('b:ll') && b:ll !=# ''
-        execute "normal! \<S-^>i".b:ll."\<ESC>"
+        call cursor(line('.'), a:col)
+        execute "normal! i".b:ll."\<ESC>"
+        " execute "normal! \<S-^>i".b:ll."\<ESC>"
     else
         execute "normal! \<S-^>v\<S-$>h\<ESC>"
         execute "normal! `>a".b:br
@@ -275,13 +278,22 @@ endfunction
 " v模式下的加入註解
 function! commenter#CommentVAdd() abort
     let i = 0
-    let s:lines = line("'>") - line("'<") + 1
-    while i < s:lines - 1
-        call commenter#CommentAdd()
-        execute "normal! j"
+    let l:lines = line("'>") - line("'<") + 1
+    execute "normal! \<S-^>"
+    let l:firstlinepos = col('.')
+    while i < l:lines
+        if i > 0
+            execute "normal! j"
+        endif
+        execute "normal! \<S-^>"
+        let l:eachlinepos = col('.')
+        if l:firstlinepos <= eachlinepos
+            call commenter#CommentAdd(l:firstlinepos)
+        else
+            call commenter#CommentAdd(l:eachlinepos)
+        endif
         let i+=1
     endwhile
-    call commenter#CommentAdd()
 endfunction
 
 
@@ -289,14 +301,15 @@ endfunction
 " v模式下的移除註解
 function! commenter#CommentVDel() abort
     let i = 0
-    let s:lines = line("'>") - line("'<") + 1
-    while i < s:lines - 1
+    let l:lines = line("'>") - line("'<") + 1
+    while i < l:lines
+        if i > 0
+            execute "normal! j"
+        endif
         if commenter#HasComment() ==# 1
             call commenter#CommentDel()
         endif
-        execute "normal! j"
         let i+=1
     endwhile
-    call commenter#CommentDel()
     call commenter#ShowInfo("   ❖  移除註解 ❖ ")
 endfunctio
