@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-04-05 11:55:59
+" Last Modified: 2018-04-16 17:53:01
 " Vim: enc=utf-8
 
 " Section: filetype comment format
@@ -20,7 +20,7 @@ let s:commentMap = {
 
 " Function: commenter#MapMetaKey() function
 " 設定 <M-/> 也就是 Alt+/
-function! commenter#MapMetaKey()
+function! commenter#MapMetaKey() abort
     execute "set <M-/>=\e/"
 endfunction
 
@@ -29,7 +29,7 @@ endfunction
 " 搜尋 commentMap 中是否有註解格式
 " Args:
 "   -filetype: 檔案類型
-function! commenter#SetUpFormat(filetype)
+function! commenter#SetUpFormat(filetype) abort
     let ft = a:filetype
     if !exists("b:isOnlyLineComment")
         let b:isOnlyLineComment = 0
@@ -65,7 +65,7 @@ endfunction
 "
 " Returns:
 "   1 if the var is set, 0 otherwise
-function! commenter#InitVariable(var, value)
+function! commenter#InitVariable(var, value) abort
     if !exists(a:var)
         execute 'let ' . a:var . ' = ' . "'" . a:value . "'"
         return 1
