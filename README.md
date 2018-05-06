@@ -1,4 +1,4 @@
-# Commenter
+# Commenter [![Travis CI Build Status](https://travis-ci.org/aben20807/vim-commenter.svg?branch=master)](https://travis-ci.org/aben20807/vim-commenter)
 
 ## 1. Installation
 ### 1.a. Installation with [Vim-Plug](https://github.com/junegunn/vim-plug)
