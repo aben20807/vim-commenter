@@ -1,0 +1,117 @@
+Before():
+  runtime autoload/commenter.vim
+  let s:commentMap = {
+    \ 'c':      { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+    \ 'cpp':    { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+    \ 'html':   { 'bl': '<!-- ', 'br': ' -->'           },
+    \ 'java':   { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+    \ 'lisp':   { 'll': '; '                            },
+    \ 'make':   { 'll': '# '                            },
+    \ 'prolog': { 'll': '% '                            },
+    \ 'python': { 'll': '# '                            },
+    \ 'rust':   { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+    \ 'sh':     { 'll': '# '                            },
+    \ 'vim':    { 'll': '" '                            }
+    \ }
+  let b:formatMap = s:commentMap[&filetype]
+  let b:ll = b:formatMap['ll']
+
+Given c():
+  int a;
+Execute():
+  AssertEqual 0, commenter#HasComment()
+
+Given c():
+  // int a;
+Execute():
+  AssertEqual 1, commenter#HasComment()
+
+Given cpp():
+  int a;
+Execute():
+  AssertEqual 0, commenter#HasComment()
+
+Given cpp():
+  // int a;
+Execute():
+  AssertEqual 1, commenter#HasComment()
+
+Given java():
+  int a;
+Execute():
+  AssertEqual 0, commenter#HasComment()
+
+Given java():
+  // int a;
+Execute():
+  AssertEqual 1, commenter#HasComment()
+
+Given lisp():
+  int a;
+Execute():
+  AssertEqual 0, commenter#HasComment()
+
+Given lisp():
+  ; int a;
+Execute():
+  AssertEqual 1, commenter#HasComment()
+
+Given make():
+  int a;
+Execute():
+  AssertEqual 0, commenter#HasComment()
+
+Given make():
+  # int a;
+Execute():
+  AssertEqual 1, commenter#HasComment()
+
+Given prolog():
+  int a;
+Execute():
+  AssertEqual 0, commenter#HasComment()
+
+Given prolog():
+  % int a;
+Execute():
+  AssertEqual 1, commenter#HasComment()
+
+Given python():
+  int a;
+Execute():
+  AssertEqual 0, commenter#HasComment()
+
+Given python():
+  # int a;
+Execute():
+  AssertEqual 1, commenter#HasComment()
+
+Given rust():
+  int a;
+Execute():
+  AssertEqual 0, commenter#HasComment()
+
+Given rust():
+  // int a;
+Execute():
+  AssertEqual 1, commenter#HasComment()
+
+Given sh():
+  int a;
+Execute():
+  AssertEqual 0, commenter#HasComment()
+
+Given sh():
+  # int a;
+Execute():
+  AssertEqual 1, commenter#HasComment()
+
+Given vim():
+  int a;
+Execute():
+  AssertEqual 0, commenter#HasComment()
+
+Given vim():
+  " int a;
+Execute():
+  AssertEqual 1, commenter#HasComment()
