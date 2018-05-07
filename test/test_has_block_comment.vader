@@ -1,0 +1,52 @@
+Include: setup.vader
+
+Given c(No block comment):
+  int a;
+Execute:
+  AssertEqual 0, commenter#HasBlockComment()
+
+Given c(Not in block comment):
+  i/* nt a; */
+Execute:
+  AssertEqual 0, commenter#HasBlockComment()
+
+Given c(In block comment after moving):
+  i/* nt a; */
+Do:
+  l
+  :doautocmd CursorMoved\<CR>
+Then:
+  AssertEqual 1, commenter#HasBlockComment()
+
+Given c(Block comment and curcor on last '/'):
+  /* int a; */
+# ^
+Execute:
+  AssertEqual 1, commenter#HasBlockComment()
+
+Given c(Block comment and curcor on last '*'):
+  /* int a; */
+#  ^
+Do:
+  l
+  :doautocmd CursorMoved\<CR>
+Then:
+  AssertEqual 1, commenter#HasBlockComment()
+
+Given c(Block comment and curcor on next '*'):
+  /* int a; */
+#           ^
+Do:
+  10l
+  :doautocmd CursorMoved\<CR>
+Then:
+  AssertEqual 1, commenter#HasBlockComment()
+
+Given c(Block comment and curcor on next '/'):
+  /* int a; */
+#            ^
+Do:
+  11l
+  :doautocmd CursorMoved\<CR>
+Then:
+  AssertEqual 1, commenter#HasBlockComment()
