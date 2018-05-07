@@ -1,117 +1,101 @@
-Before():
-  runtime autoload/commenter.vim
-  let s:commentMap = {
-    \ 'c':      { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-    \ 'cpp':    { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-    \ 'html':   { 'bl': '<!-- ', 'br': ' -->'           },
-    \ 'java':   { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-    \ 'lisp':   { 'll': '; '                            },
-    \ 'make':   { 'll': '# '                            },
-    \ 'prolog': { 'll': '% '                            },
-    \ 'python': { 'll': '# '                            },
-    \ 'rust':   { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-    \ 'sh':     { 'll': '# '                            },
-    \ 'vim':    { 'll': '" '                            }
-    \ }
-  let b:formatMap = s:commentMap[&filetype]
-  let b:ll = b:formatMap['ll']
+Include: setup.vader
 
-Given c():
+Given c(c without comment):
   int a;
-Execute():
+Execute:
   AssertEqual 0, commenter#HasComment()
 
-Given c():
+Given c(c with comment):
   // int a;
-Execute():
+Execute:
   AssertEqual 1, commenter#HasComment()
 
-Given cpp():
+Given cpp(cpp without comment):
   int a;
-Execute():
+Execute:
   AssertEqual 0, commenter#HasComment()
 
-Given cpp():
+Given cpp(cpp with comment):
   // int a;
-Execute():
+Execute:
   AssertEqual 1, commenter#HasComment()
 
-Given java():
+Given java(java without comment):
   int a;
-Execute():
+Execute:
   AssertEqual 0, commenter#HasComment()
 
-Given java():
+Given java(java with comment):
   // int a;
-Execute():
+Execute:
   AssertEqual 1, commenter#HasComment()
 
-Given lisp():
-  int a;
-Execute():
+Given lisp(lisp without comment):
+  (+ 1 2)
+Execute:
   AssertEqual 0, commenter#HasComment()
 
-Given lisp():
-  ; int a;
-Execute():
+Given lisp(lisp with comment):
+  ; (+ 1 2)
+Execute:
   AssertEqual 1, commenter#HasComment()
 
-Given make():
+Given make(make without comment):
   int a;
-Execute():
+Execute:
   AssertEqual 0, commenter#HasComment()
 
-Given make():
+Given make(make with comment):
   # int a;
-Execute():
+Execute:
   AssertEqual 1, commenter#HasComment()
 
-Given prolog():
-  int a;
-Execute():
+Given prolog(prolog without comment):
+  write('yes'), nl.
+Execute:
   AssertEqual 0, commenter#HasComment()
 
-Given prolog():
-  % int a;
-Execute():
+Given prolog(prolog with comment):
+  % write('yes'), nl.
+Execute:
   AssertEqual 1, commenter#HasComment()
 
-Given python():
+Given python(python without comment):
   int a;
-Execute():
+Execute:
   AssertEqual 0, commenter#HasComment()
 
-Given python():
+Given python(python with comment):
   # int a;
-Execute():
+Execute:
   AssertEqual 1, commenter#HasComment()
 
-Given rust():
-  int a;
-Execute():
+Given rust(rust without comment):
+  let a: i32 = 0;
+Execute:
   AssertEqual 0, commenter#HasComment()
 
-Given rust():
-  // int a;
-Execute():
+Given rust(rust with comment):
+  // let a: i32 = 0;
+Execute:
   AssertEqual 1, commenter#HasComment()
 
-Given sh():
-  int a;
-Execute():
+Given sh(sh without comment):
+  echo "OuO"
+Execute:
   AssertEqual 0, commenter#HasComment()
 
-Given sh():
-  # int a;
-Execute():
+Given sh(sh with comment):
+  # echo "OuO"
+Execute:
   AssertEqual 1, commenter#HasComment()
 
-Given vim():
-  int a;
-Execute():
+Given vim(vim without comment):
+  let b:a = 'OuO';
+Execute:
   AssertEqual 0, commenter#HasComment()
 
-Given vim():
-  " int a;
-Execute():
+Given vim(vim with comment):
+  " let b:a = 'OuO';
+Execute:
   AssertEqual 1, commenter#HasComment()
