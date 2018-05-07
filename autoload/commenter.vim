@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-04-16 17:53:01
+" Last Modified: 2018-05-07 12:33:32
 " Vim: enc=utf-8
 
 " Section: filetype comment format
@@ -135,23 +135,30 @@ function! commenter#HasBlockComment() abort
         return -1
     endif
     if exists('b:bl') && b:bl !=# '' && exists('b:br') && b:br !=# ''
+        let l:curcol = col(".")
+        execute "normal! \<S-$>"
         " Ref: http://vimdoc.sourceforge.net/htmldoc/eval.html#search()
-        let b:lastbr = searchpos('\M'.b:br, 'bnW', 0)
+        let l:lastbr = searchpos('\M'.b:br, 'bnW', 0)
         let b:lastbl = searchpos('\M'.b:bl, 'bnW', 0)
-        if b:lastbl == [0, 0]
+        if b:lastbl == [0, 0] || l:curcol < b:lastbl[1]
             return 0
         endif
-        let b:isInbl = b:lastbr == [0, 0] ||
-                    \b:lastbl[0] > b:lastbr[0] ||
-                    \(b:lastbl[0] == b:lastbr[0] && b:lastbl[1] > b:lastbr[1])
+        let l:lastblfirst = b:lastbl[1]
+        let b:isInbl = l:lastbr == [0, 0] ||
+                    \ b:lastbl[0] > l:lastbr[0] ||
+                    \ (b:lastbl[0] == l:lastbr[0] &&
+                    \ l:lastblfirst <= l:curcol)
+        execute "normal! \<S-^>"
         let b:nextbr = searchpos('\M'.b:br, 'nW', line("$"))
-        let b:nextbl = searchpos('\M'.b:bl, 'nW', line("$"))
-        if b:nextbr == [0, 0]
+        let l:nextbl = searchpos('\M'.b:bl, 'nW', line("$"))
+        if b:nextbr == [0, 0] || l:curcol > b:nextbr[1] + strlen(b:br) - 1
             return 0
         endif
-        let b:isInbr = b:nextbl == [0, 0] ||
-                    \b:nextbl[0] > b:nextbr[0] ||
-                    \(b:nextbl[0] == b:nextbr[0] && b:nextbl[1] > b:nextbr[1])
+        let l:nextbrend = b:nextbr[1] + strlen(b:br) - 1
+        let b:isInbr = l:nextbl == [0, 0] ||
+                    \ l:nextbl[0] > b:nextbr[0] ||
+                    \ (l:nextbl[0] == b:nextbr[0] &&
+                    \ l:curcol <= l:nextbrend)
         return b:isInbl && b:isInbr
     endif
 endfunction
