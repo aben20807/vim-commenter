@@ -13,7 +13,8 @@
 
 ## 2. Usage
 ### 2.a. Supported Languages
-+ C, C++, Html, Java, Lisp, Makefile, Prolog, Python, Rust, Shell script, Vim script.
++ c, conf, cpp, html, java, javascript, lex,
++ lisp, make, prolog, python, rust, sh, tmux, vim, yacc
 
 ### 2.b. Block comment
 + In v or ^v(ctrl-v) mode will use block comment.

@@ -32,8 +32,9 @@ CONTENTS                                                  *commenter-contents*
 ==============================================================================
 1. Usage                                                     *commenter_usage*
 
-Now Support C, C++, Html, Java, Lisp, Makefile, Prolog, Python, Rust,
-Shell script, Lisp and Vim script.
+Now Support:
+c, conf, cpp, html, java, javascript, lex,
+lisp, make, prolog, python, rust, sh, tmux, vim, yacc
 In v or ^v(ctrl-v) mode will use block comment. e.g. C: /* comment here */
 
 ==============================================================================

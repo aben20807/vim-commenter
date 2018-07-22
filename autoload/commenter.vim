@@ -1,21 +1,26 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-06-12 11:19:40
+" Last Modified: 2018-07-22 15:54:08
 " Vim: enc=utf-8
 
 " Section: filetype comment format
 let s:commentMap = {
-            \ 'c':      { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-            \ 'cpp':    { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-            \ 'html':   { 'bl': '<!-- ', 'br': ' -->'           },
-            \ 'java':   { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-            \ 'lisp':   { 'll': '; '                            },
-            \ 'make':   { 'll': '# '                            },
-            \ 'prolog': { 'll': '% '                            },
-            \ 'python': { 'll': '# '                            },
-            \ 'rust':   { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-            \ 'sh':     { 'll': '# '                            },
-            \ 'vim':    { 'll': '" '                            }
+            \ 'c':          { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+            \ 'conf':       { 'll': '# '                            },
+            \ 'cpp':        { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+            \ 'html':       { 'bl': '<!-- ', 'br': ' -->'           },
+            \ 'java':       { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+            \ 'javascript': { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+            \ 'lex':        { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+            \ 'lisp':       { 'll': '; '                            },
+            \ 'make':       { 'll': '# '                            },
+            \ 'prolog':     { 'll': '% '                            },
+            \ 'python':     { 'll': '# '                            },
+            \ 'rust':       { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+            \ 'sh':         { 'll': '# '                            },
+            \ 'tmux':       { 'll': '# '                            },
+            \ 'vim':        { 'll': '" '                            },
+            \ 'yacc':       { 'll': '// ', 'bl': '/* ', 'br': ' */' }
             \ }
 
 
