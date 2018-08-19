@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-07-22 15:54:08
+" Last Modified: 2018-08-19 10:36:06
 " Vim: enc=utf-8
 
 " Section: filetype comment format
@@ -113,14 +113,14 @@ function! commenter#HasComment() abort
         if b:sub ==# b:ll
             return 1
         else
-            if commenter#HasBlockComment()
+            if commenter#HasBlockComment() && g:commenter_use_block_comment
                 return 2
             else
                 return 0
             endif
         endif
     else
-        if commenter#HasBlockComment()
+        if commenter#HasBlockComment() && g:commenter_use_block_comment
             return 2
         else
             return 0
