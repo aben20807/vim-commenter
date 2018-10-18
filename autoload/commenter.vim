@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-08-19 10:36:06
+" Last Modified: 2018-10-18 19:40:27
 " Vim: enc=utf-8
 
 " Section: filetype comment format
@@ -9,6 +9,7 @@ let s:commentMap = {
             \ 'conf':       { 'll': '# '                            },
             \ 'cpp':        { 'll': '// ', 'bl': '/* ', 'br': ' */' },
             \ 'html':       { 'bl': '<!-- ', 'br': ' -->'           },
+            \ 'htmlm4':     { 'bl': '<!-- ', 'br': ' -->'           },
             \ 'java':       { 'll': '// ', 'bl': '/* ', 'br': ' */' },
             \ 'javascript': { 'll': '// ', 'bl': '/* ', 'br': ' */' },
             \ 'lex':        { 'll': '// ', 'bl': '/* ', 'br': ' */' },
@@ -50,15 +51,9 @@ function! commenter#SetUpFormat(filetype) abort
     if !exists("b:formatMap")
         return
     endif
-    for i in ['ll', 'bl', 'br']
-        if !has_key(b:formatMap, i)
-            let b:formatMap[i] = ''
-            let b:isOnlyLineComment = 1
-        endif
-    endfor
-    let b:ll = b:formatMap['ll']
-    let b:bl = b:formatMap['bl']
-    let b:br = b:formatMap['br']
+    let b:ll = has_key(b:formatMap, 'll') ? b:formatMap['ll'] : ''
+    let b:bl = has_key(b:formatMap, 'bl') ? b:formatMap['bl'] : ''
+    let b:br = has_key(b:formatMap, 'br') ? b:formatMap['br'] : ''
 endfunction
 
 
