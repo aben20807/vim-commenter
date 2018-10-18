@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-18 20:27:14
+" Last Modified: 2018-10-18 21:04:29
 " Vim: enc=utf-8
 
 " Section: filetype comment format
@@ -37,15 +37,23 @@ endfunction
 " Args:
 "   -filetype: 檔案類型
 function! commenter#SetUpFormat(filetype) abort
-    let ft = a:filetype
-    if exists('g:commenter_custom_map') && has_key(g:commenter_custom_map, ft)
-        let b:formatMap = g:commenter_custom_map[ft]
-    elseif has_key(s:commentMap, ft)
-        let b:formatMap = s:commentMap[ft]
-    endif
-    if !exists("b:formatMap")
+    if !exists("b:once")
+        let b:once = 1
+    else
         return
     endif
+
+    let s:ft = a:filetype
+    let b:commenter_supported = 1
+    if exists('g:commenter_custom_map') && has_key(g:commenter_custom_map, s:ft)
+        let b:formatMap = g:commenter_custom_map[s:ft]
+    elseif has_key(s:commentMap, s:ft)
+        let b:formatMap = s:commentMap[s:ft]
+    else
+        let b:commenter_supported = 0
+        return
+    endif
+
     let b:ll = has_key(b:formatMap, 'll') ? b:formatMap['ll'] : ''
     let b:bl = has_key(b:formatMap, 'bl') ? b:formatMap['bl'] : ''
     let b:br = has_key(b:formatMap, 'br') ? b:formatMap['br'] : ''
@@ -94,7 +102,7 @@ endfunction
 "   0:  no comment
 "   -1: does not supported
 function! commenter#HasComment() abort
-    if !exists("b:formatMap")
+    if !b:commenter_supported
         call commenter#ShowInfo("   ❖  無設定註解格式 ❖ ")
         return -1
     endif
@@ -122,7 +130,7 @@ endfunction
 " Return:
 "   -1代表有註解, 否則回傳0, -1代表沒有設定則不給註解
 function! commenter#HasBlockComment() abort
-    if !exists("b:formatMap")
+    if !b:commenter_supported
         call commenter#ShowInfo("   ❖  無設定註解格式 ❖ ")
         return -1
     endif
