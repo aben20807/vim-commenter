@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-18 21:04:29
+" Last Modified: 2018-10-18 21:13:21
 " Vim: enc=utf-8
 
 " Section: filetype comment format
@@ -103,7 +103,6 @@ endfunction
 "   -1: does not supported
 function! commenter#HasComment() abort
     if !b:commenter_supported
-        call commenter#ShowInfo("   ❖  無設定註解格式 ❖ ")
         return -1
     endif
     if b:ll !=# ''
@@ -131,7 +130,6 @@ endfunction
 "   -1代表有註解, 否則回傳0, -1代表沒有設定則不給註解
 function! commenter#HasBlockComment() abort
     if !b:commenter_supported
-        call commenter#ShowInfo("   ❖  無設定註解格式 ❖ ")
         return -1
     endif
     if exists('b:bl') && b:bl !=# '' && exists('b:br') && b:br !=# ''
@@ -198,6 +196,10 @@ endfunction
 " i, n模式下的註解
 " 先判斷是否已經註解, 原無註解則加上註解, 否則移除註解
 function! commenter#Comment() abort
+    if !b:commenter_supported
+        call commenter#ShowInfo("   ❖  無設定註解格式 ❖ ")
+        return
+    endif
     let b:curcol = col(".")
     let b:curline = line(".")
     let b:isInComment = commenter#HasComment()
