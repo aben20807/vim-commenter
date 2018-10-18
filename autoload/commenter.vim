@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-18 20:13:56
+" Last Modified: 2018-10-18 20:27:14
 " Vim: enc=utf-8
 
 " Section: filetype comment format
@@ -89,33 +89,30 @@ endfunction
 " 用於判斷游標所在行是否已經註解
 "
 " Return:
-"   -2代表在block註解內, 1代表前方有註解符號, 否則回傳0, -1代表沒有設定則不給註解
+"   2:  in block comment
+"   1:  there is a comment
+"   0:  no comment
+"   -1: does not supported
 function! commenter#HasComment() abort
     if !exists("b:formatMap")
         call commenter#ShowInfo("   ❖  無設定註解格式 ❖ ")
         return -1
     endif
-    if exists('b:ll') && b:ll !=# ''
+    if b:ll !=# ''
         let s:nowcol = getpos(".")
         execute "normal! \<S-^>"
         let b:sub = strpart(getline("."), col(".") - 1, strlen(b:ll))
         call setpos('.', s:nowcol)
         if b:sub ==# b:ll
             return 1
-        else
-            if commenter#HasBlockComment() && g:commenter_use_block_comment
-                return 2
-            else
-                return 0
-            endif
-        endif
-    else
-        if commenter#HasBlockComment() && g:commenter_use_block_comment
-            return 2
-        else
-            return 0
         endif
     endif
+    if b:bl !=# '' && b:br !=# '' &&
+                \ commenter#HasBlockComment() &&
+                \ g:commenter_use_block_comment
+        return 2
+    endif
+    return 0
 endfunction
 
 
