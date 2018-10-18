@@ -23,7 +23,7 @@ call commenter#InitVariable("g:commenter_n_key",                "<M-/>")
 call commenter#InitVariable("g:commenter_i_key",                "<M-/>")
 call commenter#InitVariable("g:commenter_v_key",                "<M-/>")
 call commenter#InitVariable("g:commenter_keep_select",          0)
-call commenter#InitVariable("g:commenter_use_block_comment",    0)
+call commenter#InitVariable("g:commenter_use_block_comment",    1)
 call commenter#InitVariable("g:commenter_allow_nest_block",     0)
 call commenter#InitVariable("g:commenter_show_info",            1)
 

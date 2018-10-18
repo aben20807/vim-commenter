@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-18 19:40:27
+" Last Modified: 2018-10-18 19:49:39
 " Vim: enc=utf-8
 
 " Section: filetype comment format
@@ -38,11 +38,6 @@ endfunction
 "   -filetype: 檔案類型
 function! commenter#SetUpFormat(filetype) abort
     let ft = a:filetype
-    if !exists("b:isOnlyLineComment")
-        let b:isOnlyLineComment = 0
-    else
-        return
-    endif
     if exists('g:commenter_custom_map') && has_key(g:commenter_custom_map, ft)
         let b:formatMap = g:commenter_custom_map[ft]
     elseif has_key(s:commentMap, ft)
@@ -258,7 +253,7 @@ endfunction
 " 先判斷是否已經註解, 原無註解則加上註解, 否則移除註解
 function! commenter#CommentV(vmode) abort
     let b:isInComment = commenter#HasComment()
-    if a:vmode ==# 'V' || b:isOnlyLineComment || !g:commenter_use_block_comment
+    if a:vmode ==# 'V' || !g:commenter_use_block_comment
         if b:isInComment ==# 1
             call commenter#CommentVDel()
         elseif b:isInComment ==# 0
