@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-18 19:49:39
+" Last Modified: 2018-10-18 20:13:56
 " Vim: enc=utf-8
 
 " Section: filetype comment format
@@ -96,10 +96,10 @@ function! commenter#HasComment() abort
         return -1
     endif
     if exists('b:ll') && b:ll !=# ''
-        let s:nowcol = col(".")
+        let s:nowcol = getpos(".")
         execute "normal! \<S-^>"
         let b:sub = strpart(getline("."), col(".") - 1, strlen(b:ll))
-        execute "normal! 0".(s:nowcol)."lh"
+        call setpos('.', s:nowcol)
         if b:sub ==# b:ll
             return 1
         else
@@ -215,11 +215,14 @@ endfunction
 
 " Function: commenter#CommentAdd() function
 " i, n模式下的加入註解
+" Args:
+"   col: add comment before the col,
+"        use to comment the multiple line
+"        when first line is more left.
 function! commenter#CommentAdd(col) abort
     if exists('b:ll') && b:ll !=# ''
         call cursor(line('.'), a:col)
         execute "normal! i".b:ll."\<ESC>"
-        " execute "normal! \<S-^>i".b:ll."\<ESC>"
     else
         execute "normal! \<S-^>v\<S-$>h\<ESC>"
         execute "normal! `>a".b:br
