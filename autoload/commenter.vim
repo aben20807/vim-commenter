@@ -132,6 +132,14 @@ function! commenter#HasBlockComment() abort
     if !b:commenter_supported
         return -1
     endif
+    let s:result = commenter#SearchBlock()
+    if s:result ==# [0, 0, 0, 0]
+        return 0
+    else
+        let b:lastbl = [s:result[0], s:result[1]]
+        let b:nextbr = [s:result[2], s:result[3]]
+        return 1
+    endif
     if exists('b:bl') && b:bl !=# '' && exists('b:br') && b:br !=# ''
         let l:curcol = col(".")
         let l:curline = line(".")
@@ -214,7 +222,7 @@ function! commenter#SearchBlock()
     endif
     let s:nbr = searchpairpos('\M'.b:bl, '', '\M'.b:br, 'w')
     call setpos('.', s:nowcur)
-    echoerr string([s:lbl[0], s:lbl[1], s:nbr[0], s:nbr[1]])
+    " echoerr string([s:lbl[0], s:lbl[1], s:nbr[0], s:nbr[1]])
     return [s:lbl[0], s:lbl[1], s:nbr[0], s:nbr[1]]
 endfunction
 
