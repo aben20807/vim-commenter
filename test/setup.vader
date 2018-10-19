@@ -1,29 +1,32 @@
 Before:
   let s:commentMap = {
-    \ 'c':      { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-    \ 'cpp':    { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-    \ 'html':   { 'bl': '<!-- ', 'br': ' -->'           },
-    \ 'java':   { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-    \ 'lisp':   { 'll': '; '                            },
-    \ 'make':   { 'll': '# '                            },
-    \ 'prolog': { 'll': '% '                            },
-    \ 'python': { 'll': '# '                            },
-    \ 'rust':   { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-    \ 'sh':     { 'll': '# '                            },
-    \ 'vim':    { 'll': '" '                            }
-    \ }
-  let ft = &filetype
-  if exists('g:commenter_custom_map') && has_key(g:commenter_custom_map, ft)
-    let b:formatMap = g:commenter_custom_map[ft]
-  elseif has_key(s:commentMap, ft)
-    let b:formatMap = s:commentMap[ft]
+              \ 'c':          { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+              \ 'conf':       { 'll': '# '                            },
+              \ 'cpp':        { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+              \ 'html':       { 'bl': '<!-- ', 'br': ' -->'           },
+              \ 'htmlm4':     { 'bl': '<!-- ', 'br': ' -->'           },
+              \ 'java':       { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+              \ 'javascript': { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+              \ 'lex':        { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+              \ 'lisp':       { 'll': '; '                            },
+              \ 'make':       { 'll': '# '                            },
+              \ 'prolog':     { 'll': '% '                            },
+              \ 'python':     { 'll': '# '                            },
+              \ 'rust':       { 'll': '// ', 'bl': '/* ', 'br': ' */' },
+              \ 'sh':         { 'll': '# '                            },
+              \ 'tmux':       { 'll': '# '                            },
+              \ 'vim':        { 'll': '" '                            },
+              \ 'yacc':       { 'll': '// ', 'bl': '/* ', 'br': ' */' }
+              \ }
+  let s:ft = &filetype
+  let b:commenter_supported = 1
+  if exists('g:commenter_custom_map') && has_key(g:commenter_custom_map, s:ft)
+      let b:formatMap = g:commenter_custom_map[s:ft]
+  elseif has_key(s:commentMap, s:ft)
+      let b:formatMap = s:commentMap[s:ft]
+  else
+      let b:commenter_supported = 0
   endif
-  for i in ['ll', 'bl', 'br']
-    if !has_key(b:formatMap, i)
-      let b:formatMap[i] = ''
-      let b:isOnlyLineComment = 1
-    endif
-  endfor
-  let b:ll = b:formatMap['ll']
-  let b:bl = b:formatMap['bl']
-  let b:br = b:formatMap['br']
+  let b:ll = has_key(b:formatMap, 'll') ? b:formatMap['ll'] : ''
+  let b:bl = has_key(b:formatMap, 'bl') ? b:formatMap['bl'] : ''
+  let b:br = has_key(b:formatMap, 'br') ? b:formatMap['br'] : ''
