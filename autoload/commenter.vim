@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-19 08:30:42
+" Last Modified: 2018-10-19 08:51:16
 " Vim: enc=utf-8
 
 " Section: filetype comment format
@@ -124,10 +124,13 @@ endfunction
 
 
 " Function: commenter#HasBlockComment() function
-" 用於判斷游標所在行是否已經註解
+"   Check if in a block comment.
+"   If yes, set b:lastbl, b:nextbr for deletion.
 "
 " Return:
-"   -1代表有註解, 否則回傳0, -1代表沒有設定則不給註解
+"   1:  there is in a block comment
+"   0:  not found block comment
+"   -1: does not supported
 function! commenter#HasBlockComment() abort
     if !b:commenter_supported
         return -1
@@ -139,63 +142,6 @@ function! commenter#HasBlockComment() abort
         let b:lastbl = [s:result[0], s:result[1]]
         let b:nextbr = [s:result[2], s:result[3]]
         return 1
-    endif
-    if exists('b:bl') && b:bl !=# '' && exists('b:br') && b:br !=# ''
-        let l:curcol = col(".")
-        let l:curline = line(".")
-        execute "normal! \<S-$>"
-        " Ref: http://vimdoc.sourceforge.net/htmldoc/eval.html#search()
-        let l:lastbr = searchpos('\M'.b:br, 'bnW', 0)
-        let b:lastbl = searchpos('\M'.b:bl, 'bnW', 0)
-        let l:lastblfirst = b:lastbl[1]
-        if b:lastbl == [0, 0] || l:curcol < l:lastblfirst
-            return 0
-        endif
-        let b:isInbl = l:lastbr == [0, 0] ||
-                    \ b:lastbl[0] > l:lastbr[0] ||
-                    \ (b:lastbl[0] == l:lastbr[0] &&
-                    \ l:lastblfirst <= l:curcol)
-        execute "normal! \<S-^>"
-        let b:nextbr = searchpos('\M'.b:br, 'nW', line("$"))
-        let l:nextbl = searchpos('\M'.b:bl, 'nW', line("$"))
-        let l:nextbrend = b:nextbr[1] + strlen(b:br) - 1
-        if b:nextbr == [0, 0] || l:curcol > l:nextbrend
-            return 0
-        endif
-        let b:isInbr = l:nextbl == [0, 0] ||
-                    \ l:nextbl[0] > b:nextbr[0] ||
-                    \ (l:nextbl[0] == b:nextbr[0] &&
-                    \ l:curcol <= l:nextbrend)
-        return b:isInbl && b:isInbr
-        " execute "normal! " . b:bl . "l"
-        " let l:lastbr = searchpos('\M'.b:br, 'bnW', 0)
-        " let b:lastbl = searchpos('\M'.b:bl, 'bnW', 0)
-        " if b:lastbl == [0, 0]
-        "     return 0
-        " endif
-        " let l:lrl = l:lastbr[0]
-        " let l:lrc = l:lastbr[1] + strlen(b:br) - 1
-        " let l:lll = b:lastbl[0]
-        " let l:llc = b:lastbl[1]
-        " let l:lnotclose = (l:lrl < l:lll || (l:lrl == l:lll && l:lrc < l:llc))
-        " let b:isInbl = l:lnotclose &&
-        "             \ (l:curline > l:lll ||
-        "             \ (l:curline == l:lll && l:curcol >= l:llc))
-        " execute "normal! " . b:br . "h"
-        " let b:nextbr = searchpos('\M'.b:br, 'nW', line("$"))
-        " let l:nextbl = searchpos('\M'.b:bl, 'nW', line("$"))
-        " if b:nextbr == [0, 0]
-        "     return 0
-        " endif
-        " let l:nrl = b:nextbr[0]
-        " let l:nrc = b:nextbr[1] + strlen(b:br) - 1
-        " let l:nll = l:nextbl[0]
-        " let l:nlc = l:nextbl[1]
-        " let l:rnotclose = (l:nrl < l:nll || (l:nrl == l:nll && l:nrc < l:nlc))
-        " let b:isInbr = l:rnotclose &&
-        "             \ (l:curline < l:nrl ||
-        "             \ (l:curline == l:nrl && l:curcol <= l:nrc))
-        " return b:isInbl && b:isInbr
     endif
 endfunction
 
@@ -222,7 +168,6 @@ function! commenter#SearchBlock()
     endif
     let s:nbr = searchpairpos('\M'.b:bl, '', '\M'.b:br, 'w')
     call setpos('.', s:nowcur)
-    " echoerr string([s:lbl[0], s:lbl[1], s:nbr[0], s:nbr[1]])
     return [s:lbl[0], s:lbl[1], s:nbr[0], s:nbr[1]]
 endfunction
 
