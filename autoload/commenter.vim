@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-18 21:13:21
+" Last Modified: 2018-10-19 08:30:42
 " Vim: enc=utf-8
 
 " Section: filetype comment format
@@ -192,6 +192,33 @@ function! commenter#HasBlockComment() abort
 endfunction
 
 
+" Function: commenter#SearchBlock() function
+"   search block position
+"   Return:
+"       [s:last_bl_lnum, s:last_bl_col, s:next_br_lnum, s:next_br_col]
+"       [0, 0, 0, 0] if not found
+function! commenter#SearchBlock()
+    let s:nowcur = getpos(".")
+    " case 1: /* ouo */
+    "         ^^^^^^
+    let s:lbl = searchpairpos('\M'.b:bl, '', '\M'.b:br, 'cb')
+    if s:lbl ==# [0, 0]
+        " case 2: /* ouo */
+        "               ^^^
+        execute "normal! " . strlen(b:br) . "h"
+        let s:lbl = searchpairpos('\M'.b:bl, '', '\M'.b:br, 'cb')
+    endif
+    if s:lbl ==# [0, 0]
+        call setpos('.', s:nowcur)
+        return [0, 0, 0, 0]
+    endif
+    let s:nbr = searchpairpos('\M'.b:bl, '', '\M'.b:br, 'w')
+    call setpos('.', s:nowcur)
+    echoerr string([s:lbl[0], s:lbl[1], s:nbr[0], s:nbr[1]])
+    return [s:lbl[0], s:lbl[1], s:nbr[0], s:nbr[1]]
+endfunction
+
+
 " Function: commenter#Comment() function
 " i, n模式下的註解
 " 先判斷是否已經註解, 原無註解則加上註解, 否則移除註解
@@ -318,7 +345,7 @@ endfunction
 
 
 " Function: commenter#CommentVAdd() function
-" v模式下的加入註解
+"   Add comment in v line mode
 function! commenter#CommentVAdd() abort
     let i = 0
     let l:lines = line("'>") - line("'<") + 1
@@ -341,7 +368,7 @@ endfunction
 
 
 " Function: commenter#CommentVDel() function
-" v模式下的移除註解
+"   Remove comment in v line mode
 function! commenter#CommentVDel() abort
     let i = 0
     let l:lines = line("'>") - line("'<") + 1
