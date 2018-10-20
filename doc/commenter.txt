@@ -33,8 +33,9 @@ CONTENTS                                                  *commenter-contents*
 1. Usage                                                     *commenter_usage*
 
 Now Support:
-c, conf, cpp, html, java, javascript, lex,
-lisp, make, prolog, python, rust, sh, tmux, vim, yacc
+c, conf, cpp, css, gnuplot, html, htmlm4, java, javascript, lex,
+lisp, make, prolog, python, rust, sh, tmux, vader, vim, yacc
+
 In v or ^v(ctrl-v) mode will use block comment. e.g. C: /* comment here */
 
 ==============================================================================
@@ -135,7 +136,7 @@ Default: 0 (Not allow nested block comment)
 
 Custom comment symbols if it not exist or you don't like default setting. >
     let g:commenter_custom_map =
-        \{'html': { 'll': '', 'bl': '<!-- ', 'br': ' -->' }}
+        \ {'ouo': { 'll': 'QuQ', 'bl': '/OuO ', 'br': ' OuO/' }}
 <
 
 Default: not set
