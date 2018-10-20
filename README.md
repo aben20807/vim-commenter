@@ -13,8 +13,8 @@
 
 ## 2. Usage
 ### 2.a. Supported Languages
-+ c, conf, cpp, html, java, javascript, lex,
-+ lisp, make, prolog, python, rust, sh, tmux, vim, yacc
++ c, conf, cpp, css, gnuplot, html, htmlm4, java, javascript, lex,
++ lisp, make, prolog, python, rust, sh, tmux, vader, vim, yacc
 
 ### 2.b. Block comment
 + In v or ^v(ctrl-v) mode will use block comment.
@@ -49,10 +49,12 @@ let g:commenter_allow_nest_block = 0
 " Custom comment map by setting g:commenter_custom_map, not setting by default.
 " ll: line comment left, bl: block comment left, br: block comment right.
 " e.g.
-let g:commenter_custom_map = {'html': { 'll': '', 'bl': '<!-- ', 'br': ' -->' }}
+let g:commenter_custom_map =
+  \ {'ouo': { 'll': 'QuQ', 'bl': '/OuO ', 'br': ' OuO/' }}
 
 
 " Show the comment information by default.
 let g:commenter_show_info = 1
 ```
+
 ![show\_info](https://imgur.com/x0GGgGd.png)
