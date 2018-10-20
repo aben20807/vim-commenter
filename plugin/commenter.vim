@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-19 22:50:41
+" Last Modified: 2018-10-20 17:08:00
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -110,15 +110,15 @@ function! SetUpFormat(filetype) abort
     let s:ft = a:filetype
     let b:commenter_supported = 1
     if exists('g:commenter_custom_map') && has_key(g:commenter_custom_map, s:ft)
-        let b:formatMap = g:commenter_custom_map[s:ft]
+        let l:formatMap = g:commenter_custom_map[s:ft]
     elseif has_key(s:commentMap, s:ft)
-        let b:formatMap = s:commentMap[s:ft]
+        let l:formatMap = s:commentMap[s:ft]
     else
         let b:commenter_supported = 0
         return
     endif
 
-    let b:ll = has_key(b:formatMap, 'll') ? b:formatMap['ll'] : ''
-    let b:bl = has_key(b:formatMap, 'bl') ? b:formatMap['bl'] : ''
-    let b:br = has_key(b:formatMap, 'br') ? b:formatMap['br'] : ''
+    let b:ll = has_key(l:formatMap, 'll') ? l:formatMap['ll'] : ''
+    let b:bl = has_key(l:formatMap, 'bl') ? l:formatMap['bl'] : ''
+    let b:br = has_key(l:formatMap, 'br') ? l:formatMap['br'] : ''
 endfunction

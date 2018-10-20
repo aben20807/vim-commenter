@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-20 16:41:31
+" Last Modified: 2018-10-20 16:55:04
 " Vim: enc=utf-8
 
 
@@ -32,11 +32,11 @@ function! commenter#HasComment() abort
         return -1
     endif
     if b:ll !=# ''
-        let s:nowcol = getpos(".")
+        let l:nowcur = getpos(".")
         execute "normal! \<S-^>"
-        let b:sub = strpart(getline("."), col(".") - 1, strlen(b:ll))
-        call setpos('.', s:nowcol)
-        if b:sub ==# b:ll
+        let l:sub = strpart(getline("."), col(".") - 1, strlen(b:ll))
+        call setpos('.', l:nowcur)
+        if l:sub ==# b:ll
             return 1
         endif
     endif
@@ -61,12 +61,12 @@ function! commenter#HasBlockComment() abort
     if !b:commenter_supported
         return -1
     endif
-    let s:result = commenter#SearchBlock()
-    if s:result ==# [0, 0, 0, 0]
+    let l:result = commenter#SearchBlock()
+    if l:result ==# [0, 0, 0, 0]
         return 0
     else
-        let b:lastbl = [s:result[0], s:result[1]]
-        let b:nextbr = [s:result[2], s:result[3]]
+        let b:lastbl = [l:result[0], l:result[1]]
+        let b:nextbr = [l:result[2], l:result[3]]
         return 1
     endif
 endfunction
@@ -75,26 +75,26 @@ endfunction
 " Function: commenter#SearchBlock() function
 "   search block position
 "   Return:
-"       [s:last_bl_lnum, s:last_bl_col, s:next_br_lnum, s:next_br_col]
+"       [l:last_bl_lnum, l:last_bl_col, l:next_br_lnum, l:next_br_col]
 "       [0, 0, 0, 0] if not found
 function! commenter#SearchBlock()
-    let s:nowcur = getpos(".")
+    let l:nowcur = getpos(".")
     " case 1: /* ouo */
     "         ^^^^^^
-    let s:lbl = searchpairpos('\M'.b:bl, '', '\M'.b:br, 'cb')
-    if s:lbl ==# [0, 0]
+    let l:lbl = searchpairpos('\M'.b:bl, '', '\M'.b:br, 'cb')
+    if l:lbl ==# [0, 0]
         " case 2: /* ouo */
         "               ^^^
         execute "normal! " . strlen(b:br) . "h"
-        let s:lbl = searchpairpos('\M'.b:bl, '', '\M'.b:br, 'cb')
+        let l:lbl = searchpairpos('\M'.b:bl, '', '\M'.b:br, 'cb')
     endif
-    if s:lbl ==# [0, 0]
-        call setpos('.', s:nowcur)
+    if l:lbl ==# [0, 0]
+        call setpos('.', l:nowcur)
         return [0, 0, 0, 0]
     endif
-    let s:nbr = searchpairpos('\M'.b:bl, '', '\M'.b:br, 'w')
-    call setpos('.', s:nowcur)
-    return [s:lbl[0], s:lbl[1], s:nbr[0], s:nbr[1]]
+    let l:nbr = searchpairpos('\M'.b:bl, '', '\M'.b:br, 'w')
+    call setpos('.', l:nowcur)
+    return [l:lbl[0], l:lbl[1], l:nbr[0], l:nbr[1]]
 endfunction
 
 
@@ -106,21 +106,21 @@ function! commenter#Comment() abort
         call commenter#ShowInfo("   ❖  無設定註解格式 ❖ ")
         return
     endif
-    let b:curcol = col(".")
-    let b:curline = line(".")
-    let b:isInComment = commenter#HasComment()
-    if b:isInComment ==# 2
+    let l:curcol = col(".")
+    let l:curline = line(".")
+    let l:isInComment = commenter#HasComment()
+    if l:isInComment ==# 2
         call commenter#BlockCommentDel()
-    elseif b:isInComment ==# 1
+    elseif l:isInComment ==# 1
         call commenter#CommentDel()
-        call cursor(b:curline, b:curcol - strlen(b:ll))
-    elseif b:isInComment ==# 0
+        call cursor(l:curline, l:curcol - strlen(b:ll))
+    elseif l:isInComment ==# 0
         execute "normal! \<S-^>"
         call commenter#CommentAdd(col('.'))
         if exists('b:ll') && b:ll !=# ''
-            call cursor(b:curline, b:curcol + strlen(b:ll))
+            call cursor(l:curline, l:curcol + strlen(b:ll))
         else
-            call cursor(b:curline, b:curcol + strlen(b:bl))
+            call cursor(l:curline, l:curcol + strlen(b:bl))
         endif
     endif
 endfunction
@@ -171,18 +171,18 @@ endfunction
 " v模式下的註解, 可多行同時註解
 " 先判斷是否已經註解, 原無註解則加上註解, 否則移除註解
 function! commenter#CommentV(vmode) abort
-    let b:isInComment = commenter#HasComment()
+    let l:isInComment = commenter#HasComment()
     if a:vmode ==# 'V' || !g:commenter_use_block_comment
-        if b:isInComment ==# 1
+        if l:isInComment ==# 1
             call commenter#CommentVDel()
-        elseif b:isInComment ==# 0
+        elseif l:isInComment ==# 0
             call commenter#CommentVAdd()
         endif
         if g:commenter_keep_select
             execute "normal! gv"
         endif
     elseif a:vmode ==# 'v'
-        if b:isInComment ==# 2 && !g:commenter_allow_nest_block
+        if l:isInComment ==# 2 && !g:commenter_allow_nest_block
             return
         endif
         " Ref: https://stackoverflow.com/q/11176159/6734174
@@ -190,22 +190,22 @@ function! commenter#CommentV(vmode) abort
         execute "normal! `<i".b:bl
         " Ref: https://superuser.com/a/114087
         execute "normal! gv"
-        let b:il = line('.')
-        let b:ic = col('.')
+        let l:il = line('.')
+        let l:ic = col('.')
         execute "normal! o"
-        let b:jl = line('.')
-        let b:jc = col('.')
-        if b:il > b:jl || ((b:il == b:jl) && (b:ic > b:jc))
+        let l:jl = line('.')
+        let l:jc = col('.')
+        if l:il > l:jl || ((l:il == l:jl) && (l:ic > l:jc))
             execute "normal! o"
         endif
         if g:commenter_keep_select
-            if b:jl == b:il
+            if l:jl == l:il
                 execute "normal! ".(strlen(b:bl) + strlen(b:br))."l"
             else
                 execute "normal! ".(strlen(b:br))."l"
             endif
         else
-            if b:jl == b:il
+            if l:jl == l:il
                 execute "normal! \<ESC>".(strlen(b:bl))."l"
             else
                 execute "normal! \<ESC>"
@@ -213,7 +213,7 @@ function! commenter#CommentV(vmode) abort
         endif
         call commenter#ShowInfo("   ❖  加入區塊註解 ❖ ")
     else " a:vmode ==# 'ctrl v'
-        if b:isInComment ==# 2 && !g:commenter_allow_nest_block
+        if l:isInComment ==# 2 && !g:commenter_allow_nest_block
             return
         endif
         execute "normal! gvOI".b:bl
