@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-19 22:51:13
+" Last Modified: 2018-10-20 16:41:31
 " Vim: enc=utf-8
 
 
@@ -133,6 +133,9 @@ endfunction
 "        use to comment the multiple line
 "        when first line is more left.
 function! commenter#CommentAdd(col) abort
+    if getline('.') =~ '^\s*$'
+        return
+    endif
     if exists('b:ll') && b:ll !=# ''
         call cursor(line('.'), a:col)
         execute "normal! i".b:ll."\<ESC>"
