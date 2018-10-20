@@ -17,27 +17,6 @@ augroup comment
 augroup END
 
 
-" Section: filetype comment format
-let s:commentMap = {
-            \ 'c':          { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-            \ 'conf':       { 'll': '# '                            },
-            \ 'cpp':        { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-            \ 'html':       { 'bl': '<!-- ', 'br': ' -->'           },
-            \ 'htmlm4':     { 'bl': '<!-- ', 'br': ' -->'           },
-            \ 'java':       { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-            \ 'javascript': { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-            \ 'lex':        { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-            \ 'lisp':       { 'll': '; '                            },
-            \ 'make':       { 'll': '# '                            },
-            \ 'prolog':     { 'll': '% '                            },
-            \ 'python':     { 'll': '# '                            },
-            \ 'rust':       { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-            \ 'sh':         { 'll': '# '                            },
-            \ 'tmux':       { 'll': '# '                            },
-            \ 'vim':        { 'll': '" '                            },
-            \ 'yacc':       { 'll': '// ', 'bl': '/* ', 'br': ' */' }
-            \ }
-
 " Function: s:InitVariable() function
 " 初始化變數
 " Ref: https://github.com/scrooloose/nerdcommenter/blob/master/plugin/NERD_commenter.vim#L26
@@ -111,8 +90,8 @@ function! SetUpFormat(filetype) abort
     let b:commenter_supported = 1
     if exists('g:commenter_custom_map') && has_key(g:commenter_custom_map, s:ft)
         let l:formatMap = g:commenter_custom_map[s:ft]
-    elseif has_key(s:commentMap, s:ft)
-        let l:formatMap = s:commentMap[s:ft]
+    elseif commenter#formatmap#HasFormat(s:ft)
+        let l:formatMap = commenter#formatmap#GetFormat(s:ft)
     else
         let b:commenter_supported = 0
         return
