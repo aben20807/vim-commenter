@@ -50,3 +50,14 @@ Do:
   :doautocmd CursorMoved\<CR>
 Then:
   AssertEqual 1, commenter#HasBlockComment()
+
+Given c(Multiple line block comment):
+  /*
+    int a;
+    int b;
+  */
+Do:
+  j
+  :doautocmd CursorMoved\<CR>
+Then:
+  AssertEqual 1, commenter#HasBlockComment()
