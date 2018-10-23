@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-20 16:55:04
+" Last Modified: 2018-10-23 11:14:46
 " Vim: enc=utf-8
 
 
@@ -31,12 +31,12 @@ function! commenter#HasComment() abort
     if !b:commenter_supported
         return -1
     endif
-    if b:ll !=# ''
+    if b:ll_s !=# ''
         let l:nowcur = getpos(".")
         execute "normal! \<S-^>"
-        let l:sub = strpart(getline("."), col(".") - 1, strlen(b:ll))
+        let l:sub = strpart(getline("."), col(".") - 1, strlen(b:ll_s))
         call setpos('.', l:nowcur)
-        if l:sub ==# b:ll
+        if l:sub ==# b:ll_s
             return 1
         endif
     endif
@@ -81,18 +81,18 @@ function! commenter#SearchBlock()
     let l:nowcur = getpos(".")
     " case 1: /* ouo */
     "         ^^^^^^
-    let l:lbl = searchpairpos('\M'.b:bl, '', '\M'.b:br, 'cb')
+    let l:lbl = searchpairpos('\M'.b:bl_s, '', '\M'.b:br_s, 'cb')
     if l:lbl ==# [0, 0]
         " case 2: /* ouo */
         "               ^^^
-        execute "normal! " . strlen(b:br) . "h"
-        let l:lbl = searchpairpos('\M'.b:bl, '', '\M'.b:br, 'cb')
+        execute "normal! " . strlen(b:br_s) . "h"
+        let l:lbl = searchpairpos('\M'.b:bl_s, '', '\M'.b:br_s, 'cb')
     endif
     if l:lbl ==# [0, 0]
         call setpos('.', l:nowcur)
         return [0, 0, 0, 0]
     endif
-    let l:nbr = searchpairpos('\M'.b:bl, '', '\M'.b:br, 'w')
+    let l:nbr = searchpairpos('\M'.b:bl_s, '', '\M'.b:br_s, 'w')
     call setpos('.', l:nowcur)
     return [l:lbl[0], l:lbl[1], l:nbr[0], l:nbr[1]]
 endfunction

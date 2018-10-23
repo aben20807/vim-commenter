@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-20 17:08:00
+" Last Modified: 2018-10-23 11:14:36
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -97,7 +97,12 @@ function! SetUpFormat(filetype) abort
         return
     endif
 
+    " for adding
     let b:ll = has_key(l:formatMap, 'll') ? l:formatMap['ll'] : ''
     let b:bl = has_key(l:formatMap, 'bl') ? l:formatMap['bl'] : ''
     let b:br = has_key(l:formatMap, 'br') ? l:formatMap['br'] : ''
+    " for searching: remove leading and tailed spaces
+    let b:ll_s = substitute(b:ll, '^\s\+\|\s\+$', '', '')
+    let b:bl_s = substitute(b:bl, '^\s\+\|\s\+$', '', '')
+    let b:br_s = substitute(b:br, '^\s\+\|\s\+$', '', '')
 endfunction

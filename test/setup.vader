@@ -30,3 +30,6 @@ Before:
   let b:ll = has_key(b:formatMap, 'll') ? b:formatMap['ll'] : ''
   let b:bl = has_key(b:formatMap, 'bl') ? b:formatMap['bl'] : ''
   let b:br = has_key(b:formatMap, 'br') ? b:formatMap['br'] : ''
+  let b:ll_s = substitute(b:ll, '^\s\+\|\s\+$', '', '')
+  let b:bl_s = substitute(b:bl, '^\s\+\|\s\+$', '', '')
+  let b:br_s = substitute(b:br, '^\s\+\|\s\+$', '', '')
