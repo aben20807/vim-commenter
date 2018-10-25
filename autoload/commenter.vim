@@ -117,9 +117,11 @@ function! commenter#Comment() abort
     let l:isInComment = commenter#HasComment()
     if l:isInComment ==# 2
         call commenter#BlockCommentDel()
+        call commenter#ShowInfo("   ❖  移除區塊註解 ❖ ")
     elseif l:isInComment ==# 1
         call commenter#CommentDel()
         call cursor(l:curline, l:curcol - strlen(b:commenter_formatmap['ll']))
+        call commenter#ShowInfo("   ❖  移除註解 ❖ ")
     elseif l:isInComment ==# 0
         execute "normal! \<S-^>"
         call commenter#CommentAdd(col('.'))
@@ -130,6 +132,7 @@ function! commenter#Comment() abort
             call cursor(l:curline, l:curcol +
                         \ strlen(b:commenter_formatmap['bl']))
         endif
+        call commenter#ShowInfo("   ❖  加入註解 ❖ ")
     endif
 endfunction
 
@@ -149,7 +152,6 @@ function! commenter#CommentAdd(col) abort
         execute "normal! `>a".b:commenter_formatmap['br']
         execute "normal! `<i".b:commenter_formatmap['bl']."\<ESC>"
     endif
-    call commenter#ShowInfo("   ❖  加入註解 ❖ ")
 endfunction
 
 
@@ -157,7 +159,6 @@ endfunction
 " i, n模式下的移除註解
 function! commenter#CommentDel() abort
     execute "normal! \<S-^>".strlen(b:commenter_formatmap['ll'])."x"
-    call commenter#ShowInfo("   ❖  移除註解 ❖ ")
 endfunction
 
 
@@ -168,7 +169,6 @@ function! commenter#BlockCommentDel() abort
     execute "normal! ".strlen(b:commenter_formatmap['br'])."x"
     call cursor(b:lastbl)
     execute "normal! ".strlen(b:commenter_formatmap['bl'])."x"
-    call commenter#ShowInfo("   ❖  移除區塊註解 ❖ ")
 endfunction
 
 
@@ -180,8 +180,10 @@ function! commenter#CommentV(vmode) abort
     if a:vmode ==# 'V' || !g:commenter_use_block_comment
         if l:isInComment ==# 1
             call commenter#CommentVDel()
+            call commenter#ShowInfo("   ❖  移除註解 ❖ ")
         elseif l:isInComment ==# 0
             call commenter#CommentVAdd()
+            call commenter#ShowInfo("   ❖  加入註解 ❖ ")
         endif
         if g:commenter_keep_select
             execute "normal! gv"
@@ -276,5 +278,4 @@ function! commenter#CommentVDel() abort
         endif
         let i+=1
     endwhile
-    call commenter#ShowInfo("   ❖  移除註解 ❖ ")
-endfunctio
+endfunction
