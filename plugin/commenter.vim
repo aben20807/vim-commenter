@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-23 11:14:36
+" Last Modified: 2018-10-25 11:47:36
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -12,7 +12,7 @@ if v:version < 700
 endif
 let has_loaded_commenter = 1
 
-augroup comment
+augroup Commenter
     autocmd BufEnter,BufRead,BufNewFile * call SetUpFormat(&filetype)
 augroup END
 
@@ -43,6 +43,7 @@ call s:InitVariable("g:commenter_keep_select",          0)
 call s:InitVariable("g:commenter_use_block_comment",    1)
 call s:InitVariable("g:commenter_allow_nest_block",     0)
 call s:InitVariable("g:commenter_show_info",            1)
+call s:InitVariable("g:commenter_trim_whitespace",      1)
 
 
 " Function: s:SetUpKeyMap() function
@@ -89,20 +90,27 @@ function! SetUpFormat(filetype) abort
     let s:ft = a:filetype
     let b:commenter_supported = 1
     if exists('g:commenter_custom_map') && has_key(g:commenter_custom_map, s:ft)
-        let l:formatMap = g:commenter_custom_map[s:ft]
+        let b:commenter_formatmap = g:commenter_custom_map[s:ft]
     elseif commenter#formatmap#HasFormat(s:ft)
-        let l:formatMap = commenter#formatmap#GetFormat(s:ft)
+        let b:commenter_formatmap = commenter#formatmap#GetFormat(s:ft)
     else
         let b:commenter_supported = 0
         return
     endif
 
     " for adding
-    let b:ll = has_key(l:formatMap, 'll') ? l:formatMap['ll'] : ''
-    let b:bl = has_key(l:formatMap, 'bl') ? l:formatMap['bl'] : ''
-    let b:br = has_key(l:formatMap, 'br') ? l:formatMap['br'] : ''
-    " for searching: remove leading and tailed spaces
-    let b:ll_s = substitute(b:ll, '^\s\+\|\s\+$', '', '')
-    let b:bl_s = substitute(b:bl, '^\s\+\|\s\+$', '', '')
-    let b:br_s = substitute(b:br, '^\s\+\|\s\+$', '', '')
+    for i in ['ll', 'bl', 'br']
+        if !has_key(b:commenter_formatmap, i)
+            let b:commenter_formatmap[i] = ''
+        endif
+    endfor
+
+    " for searching: remove leading and trailing  spaces
+    let b:commenter_formatmap_s = copy(b:commenter_formatmap)
+    if g:commenter_trim_whitespace
+        for i in ['ll', 'bl', 'br']
+            let b:commenter_formatmap_s[i] =
+                \ substitute(b:commenter_formatmap[i], '^\s\+\|\s\+$', '', '')
+        endfor
+    endif
 endfunction

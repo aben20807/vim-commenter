@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-23 11:14:46
+" Last Modified: 2018-10-25 11:45:57
 " Vim: enc=utf-8
 
 
@@ -31,16 +31,19 @@ function! commenter#HasComment() abort
     if !b:commenter_supported
         return -1
     endif
-    if b:ll_s !=# ''
+    " if b:commenter_formatmap_s['ll'] !=# ''
+    if b:commenter_formatmap_s['ll'] !=# ''
         let l:nowcur = getpos(".")
         execute "normal! \<S-^>"
-        let l:sub = strpart(getline("."), col(".") - 1, strlen(b:ll_s))
+        let l:sub = strpart(getline("."), col(".") - 1,
+                    \ strlen(b:commenter_formatmap_s['ll']))
         call setpos('.', l:nowcur)
-        if l:sub ==# b:ll_s
+        if l:sub ==# b:commenter_formatmap_s['ll']
             return 1
         endif
     endif
-    if b:bl !=# '' && b:br !=# '' &&
+    if b:commenter_formatmap['bl'] !=# '' &&
+                \ b:commenter_formatmap['br'] !=# '' &&
                 \ commenter#HasBlockComment() &&
                 \ g:commenter_use_block_comment
         return 2
@@ -79,20 +82,23 @@ endfunction
 "       [0, 0, 0, 0] if not found
 function! commenter#SearchBlock()
     let l:nowcur = getpos(".")
-    " case 1: /* ouo */
-    "         ^^^^^^
-    let l:lbl = searchpairpos('\M'.b:bl_s, '', '\M'.b:br_s, 'cb')
+    " case 1: /* ouo */ (g:commenter_trim_whitespace is 1)
+    "         ^^^^^^^
+    let l:lbl = searchpairpos('\M'.b:commenter_formatmap_s['bl'], '',
+                \ '\M'.b:commenter_formatmap_s['br'], 'cb')
     if l:lbl ==# [0, 0]
         " case 2: /* ouo */
-        "               ^^^
-        execute "normal! " . strlen(b:br_s) . "h"
-        let l:lbl = searchpairpos('\M'.b:bl_s, '', '\M'.b:br_s, 'cb')
+        "                ^^
+        execute "normal! " . strlen(b:commenter_formatmap_s['br']) . "h"
+        let l:lbl = searchpairpos('\M'.b:commenter_formatmap_s['bl'], '',
+                    \ '\M'.b:commenter_formatmap_s['br'], 'cb')
     endif
     if l:lbl ==# [0, 0]
         call setpos('.', l:nowcur)
         return [0, 0, 0, 0]
     endif
-    let l:nbr = searchpairpos('\M'.b:bl_s, '', '\M'.b:br_s, 'w')
+    let l:nbr = searchpairpos('\M'.b:commenter_formatmap_s['bl'], '',
+                \ '\M'.b:commenter_formatmap_s['br'], 'w')
     call setpos('.', l:nowcur)
     return [l:lbl[0], l:lbl[1], l:nbr[0], l:nbr[1]]
 endfunction
@@ -113,14 +119,16 @@ function! commenter#Comment() abort
         call commenter#BlockCommentDel()
     elseif l:isInComment ==# 1
         call commenter#CommentDel()
-        call cursor(l:curline, l:curcol - strlen(b:ll))
+        call cursor(l:curline, l:curcol - strlen(b:commenter_formatmap['ll']))
     elseif l:isInComment ==# 0
         execute "normal! \<S-^>"
         call commenter#CommentAdd(col('.'))
-        if exists('b:ll') && b:ll !=# ''
-            call cursor(l:curline, l:curcol + strlen(b:ll))
+        if b:commenter_formatmap['ll'] !=# ''
+            call cursor(l:curline, l:curcol +
+                        \ strlen(b:commenter_formatmap['ll']))
         else
-            call cursor(l:curline, l:curcol + strlen(b:bl))
+            call cursor(l:curline, l:curcol +
+                        \ strlen(b:commenter_formatmap['bl']))
         endif
     endif
 endfunction
@@ -136,13 +144,13 @@ function! commenter#CommentAdd(col) abort
     if getline('.') =~ '^\s*$'
         return
     endif
-    if exists('b:ll') && b:ll !=# ''
+    if b:commenter_formatmap['ll'] !=# ''
         call cursor(line('.'), a:col)
-        execute "normal! i".b:ll."\<ESC>"
+        execute "normal! i".b:commenter_formatmap['ll']."\<ESC>"
     else
         execute "normal! \<S-^>v\<S-$>h\<ESC>"
-        execute "normal! `>a".b:br
-        execute "normal! `<i".b:bl."\<ESC>"
+        execute "normal! `>a".b:commenter_formatmap['br']
+        execute "normal! `<i".b:commenter_formatmap['bl']."\<ESC>"
     endif
     call commenter#ShowInfo("   ❖  加入註解 ❖ ")
 endfunction
@@ -151,7 +159,7 @@ endfunction
 " Function: commenter#CommentDel() function
 " i, n模式下的移除註解
 function! commenter#CommentDel() abort
-    execute "normal! \<S-^>".strlen(b:ll)."x"
+    execute "normal! \<S-^>".strlen(b:commenter_formatmap['ll'])."x"
     call commenter#ShowInfo("   ❖  移除註解 ❖ ")
 endfunction
 
@@ -160,9 +168,9 @@ endfunction
 " i, n模式下的移除block註解
 function! commenter#BlockCommentDel() abort
     call cursor(b:nextbr)
-    execute "normal! ".strlen(b:br)."x"
+    execute "normal! ".strlen(b:commenter_formatmap['br'])."x"
     call cursor(b:lastbl)
-    execute "normal! ".strlen(b:bl)."x"
+    execute "normal! ".strlen(b:commenter_formatmap['bl'])."x"
     call commenter#ShowInfo("   ❖  移除區塊註解 ❖ ")
 endfunction
 
@@ -186,8 +194,8 @@ function! commenter#CommentV(vmode) abort
             return
         endif
         " Ref: https://stackoverflow.com/q/11176159/6734174
-        execute "normal! `>a".b:br
-        execute "normal! `<i".b:bl
+        execute "normal! `>a".b:commenter_formatmap['br']
+        execute "normal! `<i".b:commenter_formatmap['bl']
         " Ref: https://superuser.com/a/114087
         execute "normal! gv"
         let l:il = line('.')
@@ -200,13 +208,14 @@ function! commenter#CommentV(vmode) abort
         endif
         if g:commenter_keep_select
             if l:jl == l:il
-                execute "normal! ".(strlen(b:bl) + strlen(b:br))."l"
+                execute "normal! ".(strlen(b:commenter_formatmap['bl']) +
+                                    \ strlen(b:commenter_formatmap['br']))."l"
             else
-                execute "normal! ".(strlen(b:br))."l"
+                execute "normal! ".(strlen(b:commenter_formatmap['br']))."l"
             endif
         else
             if l:jl == l:il
-                execute "normal! \<ESC>".(strlen(b:bl))."l"
+                execute "normal! \<ESC>".(strlen(b:commenter_formatmap['bl']))."l"
             else
                 execute "normal! \<ESC>"
             endif
@@ -216,10 +225,11 @@ function! commenter#CommentV(vmode) abort
         if l:isInComment ==# 2 && !g:commenter_allow_nest_block
             return
         endif
-        execute "normal! gvOI".b:bl
-        execute "normal! gvO".strlen(b:bl)."lA".b:br."\<ESC>"
+        execute "normal! gvOI".b:commenter_formatmap['bl']
+        execute "normal! gvO".strlen(b:commenter_formatmap['bl'])."lA".
+                    \ b:commenter_formatmap['br']."\<ESC>"
         if g:commenter_keep_select
-            execute "normal! gv".strlen(b:br)."l"
+            execute "normal! gv".strlen(b:commenter_formatmap['br'])."l"
         endif
         call commenter#ShowInfo("   ❖  加入區塊註解 ❖ ")
     endif
