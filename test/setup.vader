@@ -1,35 +1,48 @@
 Before:
   let s:commentMap = {
-              \ 'c':          { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-              \ 'conf':       { 'll': '# '                            },
-              \ 'cpp':        { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-              \ 'html':       { 'bl': '<!-- ', 'br': ' -->'           },
-              \ 'htmlm4':     { 'bl': '<!-- ', 'br': ' -->'           },
-              \ 'java':       { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-              \ 'javascript': { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-              \ 'lex':        { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-              \ 'lisp':       { 'll': '; '                            },
-              \ 'make':       { 'll': '# '                            },
-              \ 'prolog':     { 'll': '% '                            },
-              \ 'python':     { 'll': '# '                            },
-              \ 'rust':       { 'll': '// ', 'bl': '/* ', 'br': ' */' },
-              \ 'sh':         { 'll': '# '                            },
-              \ 'tmux':       { 'll': '# '                            },
-              \ 'vim':        { 'll': '" '                            },
-              \ 'yacc':       { 'll': '// ', 'bl': '/* ', 'br': ' */' }
-              \ }
+    \ 'c':          { 'll': '// ',  'bl': '/* ',    'br': ' */'     },
+    \ 'conf':       { 'll': '# '                                    },
+    \ 'cpp':        { 'll': '// ',  'bl': '/* ',    'br': ' */'     },
+    \ 'css':        {               'bl': '/* ',    'br': ' */'     },
+    \ 'gnuplot':    { 'll': '# '                                    },
+    \ 'html':       {               'bl': '<!-- ',  'br': ' -->'    },
+    \ 'htmlm4':     {               'bl': '<!-- ',  'br': ' -->'    },
+    \ 'java':       { 'll': '// ',  'bl': '/* ',    'br': ' */'     },
+    \ 'javascript': { 'll': '// ',  'bl': '/* ',    'br': ' */'     },
+    \ 'lex':        { 'll': '// ',  'bl': '/* ',    'br': ' */'     },
+    \ 'lisp':       { 'll': '; ',   'bl': '#| ',    'br': ' |#'     },
+    \ 'make':       { 'll': '# '                                    },
+    \ 'prolog':     { 'll': '% '                                    },
+    \ 'python':     { 'll': '# '                                    },
+    \ 'rust':       { 'll': '// ',  'bl': '/* ',    'br': ' */'     },
+    \ 'sh':         { 'll': '# '                                    },
+    \ 'tmux':       { 'll': '# '                                    },
+    \ 'vader':      { 'll': '" '                                    },
+    \ 'vim':        { 'll': '" '                                    },
+    \ 'yacc':       { 'll': '// ',  'bl': '/* ',    'br': ' */'     }
+    \ }
   let s:ft = &filetype
   let b:commenter_supported = 1
   if exists('g:commenter_custom_map') && has_key(g:commenter_custom_map, s:ft)
-      let b:formatMap = g:commenter_custom_map[s:ft]
-  elseif has_key(s:commentMap, s:ft)
-      let b:formatMap = s:commentMap[s:ft]
+    let b:commenter_formatmap = g:commenter_custom_map[s:ft]
+  elseif commenter#formatmap#HasFormat(s:ft)
+    let b:commenter_formatmap = commenter#formatmap#GetFormat(s:ft)
   else
-      let b:commenter_supported = 0
+    let b:commenter_supported = 0
   endif
-  let b:ll = has_key(b:formatMap, 'll') ? b:formatMap['ll'] : ''
-  let b:bl = has_key(b:formatMap, 'bl') ? b:formatMap['bl'] : ''
-  let b:br = has_key(b:formatMap, 'br') ? b:formatMap['br'] : ''
-  let b:ll_s = substitute(b:ll, '^\s\+\|\s\+$', '', '')
-  let b:bl_s = substitute(b:bl, '^\s\+\|\s\+$', '', '')
-  let b:br_s = substitute(b:br, '^\s\+\|\s\+$', '', '')
+
+  " for adding
+  for i in ['ll', 'bl', 'br']
+    if !has_key(b:commenter_formatmap, i)
+      let b:commenter_formatmap[i] = ''
+    endif
+  endfor
+
+  " for searching: remove leading and trailing  spaces
+  let b:commenter_formatmap_s = copy(b:commenter_formatmap)
+  if g:commenter_trim_whitespace
+    for i in ['ll', 'bl', 'br']
+      let b:commenter_formatmap_s[i] =
+        \ substitute(b:commenter_formatmap[i], '^\s\+\|\s\+$', '', '')
+    endfor
+  endif
