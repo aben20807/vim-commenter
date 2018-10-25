@@ -54,7 +54,7 @@ endfunction
 
 " Function: commenter#HasBlockComment() function
 "   Check if in a block comment.
-"   If yes, set b:lastbl, b:nextbr for deletion.
+"   If yes, set b:commenter_lastbl, b:commenter_nextbr for deletion.
 "
 " Return:
 "   1:  there is in a block comment
@@ -68,8 +68,8 @@ function! commenter#HasBlockComment() abort
     if l:result ==# [0, 0, 0, 0]
         return 0
     else
-        let b:lastbl = [l:result[0], l:result[1]]
-        let b:nextbr = [l:result[2], l:result[3]]
+        let b:commenter_lastbl = [l:result[0], l:result[1]]
+        let b:commenter_nextbr = [l:result[2], l:result[3]]
         return 1
     endif
 endfunction
@@ -165,9 +165,9 @@ endfunction
 " Function: commenter#BlockCommentDel() function
 " i, n模式下的移除block註解
 function! commenter#BlockCommentDel() abort
-    call cursor(b:nextbr)
+    call cursor(b:commenter_nextbr)
     execute "normal! ".strlen(b:commenter_formatmap['br'])."x"
-    call cursor(b:lastbl)
+    call cursor(b:commenter_lastbl)
     execute "normal! ".strlen(b:commenter_formatmap['bl'])."x"
 endfunction
 
