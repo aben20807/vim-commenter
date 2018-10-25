@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-25 11:47:36
+" Last Modified: 2018-10-25 13:21:57
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -44,6 +44,7 @@ call s:InitVariable("g:commenter_use_block_comment",    1)
 call s:InitVariable("g:commenter_allow_nest_block",     0)
 call s:InitVariable("g:commenter_show_info",            1)
 call s:InitVariable("g:commenter_trim_whitespace",      1)
+call s:InitVariable("g:commenter_comment_empty",        1)
 
 
 " Function: s:SetUpKeyMap() function

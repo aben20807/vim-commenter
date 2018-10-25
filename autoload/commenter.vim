@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-25 11:45:57
+" Last Modified: 2018-10-25 13:21:50
 " Vim: enc=utf-8
 
 
@@ -141,9 +141,6 @@ endfunction
 "        use to comment the multiple line
 "        when first line is more left.
 function! commenter#CommentAdd(col) abort
-    if getline('.') =~ '^\s*$'
-        return
-    endif
     if b:commenter_formatmap['ll'] !=# ''
         call cursor(line('.'), a:col)
         execute "normal! i".b:commenter_formatmap['ll']."\<ESC>"
@@ -249,7 +246,13 @@ function! commenter#CommentVAdd() abort
         endif
         execute "normal! \<S-^>"
         let l:eachlinepos = col('.')
-        if l:firstlinepos <= eachlinepos
+        if getline('.') =~ '^\s*$'
+            if g:commenter_comment_empty
+                call setline('.', substitute(getline('.'), '^',
+                            \ join(repeat([' '], l:firstlinepos - 1), ''), ''))
+                call commenter#CommentAdd(l:firstlinepos)
+            endif
+        elseif l:firstlinepos <= eachlinepos
             call commenter#CommentAdd(l:firstlinepos)
         else
             call commenter#CommentAdd(l:eachlinepos)
