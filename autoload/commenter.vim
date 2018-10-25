@@ -1,14 +1,14 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-25 13:21:50
+" Last Modified: 2018-10-25 13:56:31
 " Vim: enc=utf-8
 
 
 " Function: commenter#ShowInfo(str) function
-" 印出字串用
+"   For print message.
 "
 " Args:
-"   -str: 要印出的字串
+"   str: string want to print out.
 function! commenter#ShowInfo(str) abort
     if g:commenter_show_info
         redraw
@@ -20,7 +20,7 @@ endfunction
 
 
 " Function: commenter#HasComment() function
-" 用於判斷游標所在行是否已經註解
+"   Check the curreny if commented or not
 "
 " Return:
 "   2:  in block comment
@@ -76,10 +76,11 @@ endfunction
 
 
 " Function: commenter#SearchBlock() function
-"   search block position
-"   Return:
-"       [l:last_bl_lnum, l:last_bl_col, l:next_br_lnum, l:next_br_col]
-"       [0, 0, 0, 0] if not found
+"   Search block position
+"
+" Return:
+"   [l:last_bl_lnum, l:last_bl_col, l:next_br_lnum, l:next_br_col]
+"   [0, 0, 0, 0] if not found
 function! commenter#SearchBlock()
     let l:nowcur = getpos(".")
     " case 1: /* ouo */ (g:commenter_trim_whitespace is 1)
@@ -105,8 +106,8 @@ endfunction
 
 
 " Function: commenter#Comment() function
-" i, n模式下的註解
-" 先判斷是否已經註解, 原無註解則加上註解, 否則移除註解
+"   Comment in i, n mode
+"   If commented then uncomment it, otherwise comment it.
 function! commenter#Comment() abort
     if !b:commenter_supported
         call commenter#ShowInfo("   ❖  無設定註解格式 ❖ ")
@@ -138,7 +139,7 @@ endfunction
 
 
 " Function: commenter#CommentAdd() function
-" i, n模式下的加入註解
+"   Comment the line in i, n mode.
 " Args:
 "   col: add comment before the col,
 "        use to comment the multiple line
@@ -156,14 +157,14 @@ endfunction
 
 
 " Function: commenter#CommentDel() function
-" i, n模式下的移除註解
+"   Uncomment in i, n mode.
 function! commenter#CommentDel() abort
     execute "normal! \<S-^>".strlen(b:commenter_formatmap['ll'])."x"
 endfunction
 
 
 " Function: commenter#BlockCommentDel() function
-" i, n模式下的移除block註解
+"   Remove block comment in i, n mode.
 function! commenter#BlockCommentDel() abort
     call cursor(b:commenter_nextbr)
     execute "normal! ".strlen(b:commenter_formatmap['br'])."x"
@@ -173,8 +174,7 @@ endfunction
 
 
 " Function: commenter#CommentV() function
-" v模式下的註解, 可多行同時註解
-" 先判斷是否已經註解, 原無註解則加上註解, 否則移除註解
+"   Comment in v mode, support multiple lines.
 function! commenter#CommentV(vmode) abort
     let l:isInComment = commenter#HasComment()
     if a:vmode ==# 'V' || !g:commenter_use_block_comment

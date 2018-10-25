@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-25 13:21:57
+" Last Modified: 2018-10-25 13:56:28
 " Vim: enc=utf-8
 
 if exists("has_loaded_commenter")
@@ -18,11 +18,11 @@ augroup END
 
 
 " Function: s:InitVariable() function
-" 初始化變數
+" Initialize valiables
 " Ref: https://github.com/scrooloose/nerdcommenter/blob/master/plugin/NERD_commenter.vim#L26
 " Args:
-"   -var: the name of the var to be initialised
-"   -value: the value to initialise var to
+"   var: the name of the var to be initialised
+"   value: the value to initialise var to
 " Returns:
 "   1 if the var is set, 0 otherwise
 function! s:InitVariable(var, value)
@@ -48,7 +48,7 @@ call s:InitVariable("g:commenter_comment_empty",        1)
 
 
 " Function: s:SetUpKeyMap() function
-" map functions to key
+"   Map functions to key
 function! s:SetUpKeyMap()
     execute "nnoremap <silent> ".g:commenter_n_key.
                 \ " :<C-u>call commenter#Comment()<CR>"
@@ -60,7 +60,7 @@ endfunction
 
 
 " Function: s:MapMetaKey() function
-" 設定 <M-/> 也就是 Alt+/
+" Set <M-/> key mapping
 function! s:MapMetaKey()
     if g:commenter_n_key ==# '<M-/>' ||
      \ g:commenter_i_key ==# '<M-/>' ||
@@ -70,7 +70,7 @@ function! s:MapMetaKey()
 endfunction
 
 
-" Section: key map 設定
+" Section: key map setup
 if g:commenter_use_default_mapping
     call s:MapMetaKey()
     call s:SetUpKeyMap()
@@ -78,9 +78,9 @@ endif
 
 
 " Function: SetUpFormat(filetype) function
-" 搜尋 commentMap 中是否有註解格式
+"   Setup comment format
 " Args:
-"   -filetype: 檔案類型
+"   filetype
 function! SetUpFormat(filetype) abort
     if !exists("b:once")
         let b:once = 1
