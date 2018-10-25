@@ -26,6 +26,8 @@ CONTENTS                                                  *commenter-contents*
   3.7 g:commenter_allow_nest_block .... |config_commenter_allow_nest_block|
   3.8 g:commenter_custom_map .......... |config_commenter_custom_map|
   3.9 g:commenter_show_info ........... |config_commenter_show_info|
+  3.10 g:commenter_trim_whitespace .... |config_commenter_trim_whitespace|
+  3.11 g:commenter_comment_empty ...... |commenter_comment_empty|
  4. License ........................... |commenter_license|
  5. Bugs .............................. |commenter_bugs|
 
@@ -149,6 +151,27 @@ Set this to 0 to not show comment info like screenshot ❖  加入註解 ❖. >
 <
 
 Default: 1 (show info)
+
+------------------------------------------------------------------------------
+3.10 g:commenter_trim_whitespace            *config_commenter_trim_whitespace*
+
+Set this to 0 to not trim leading and trailing white spaces when
+searching comment. For example: `/* ` will search `/*`, it is good
+to avoid without space in sometimes leaded comment not be detected.
+>
+    let g:commenter_trim_whitespace = 0
+<
+
+Default: 1 (trim the space)
+
+------------------------------------------------------------------------------
+3.11 g:commenter_comment_empty                       *commenter_comment_empty*
+
+Set this to 0 to not allow comment the empty line. >
+    let g:commenter_comment_empty = 0
+<
+
+Default: 1 (can comment empty line)
 
 ==============================================================================
 4. License                                                 *commenter_license*

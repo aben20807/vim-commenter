@@ -106,7 +106,7 @@ function! SetUpFormat(filetype) abort
         endif
     endfor
 
-    " for searching: remove leading and trailing  spaces
+    " for searching: remove leading and trailing spaces
     let b:commenter_formatmap_s = copy(b:commenter_formatmap)
     if g:commenter_trim_whitespace
         for i in ['ll', 'bl', 'br']

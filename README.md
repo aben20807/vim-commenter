@@ -55,6 +55,16 @@ let g:commenter_custom_map =
 
 " Show the comment information by default.
 let g:commenter_show_info = 1
+
+
+" Trim leading and trailing white spaces when searching comment by default.
+" For example: `/* ` will search `/*`, it is good to avoid without space
+" in sometimes leaded comment not be detected.
+let g:commenter_trim_whitespace = 1
+
+
+" Allow comment the empty line by default
+let g:commenter_comment_empty = 1
 ```
 
 ![show\_info](https://imgur.com/x0GGgGd.png)
