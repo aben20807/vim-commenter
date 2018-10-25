@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-25 13:56:31
+" Last Modified: 2018-10-25 14:10:01
 " Vim: enc=utf-8
 
 
@@ -166,6 +166,8 @@ endfunction
 " Function: commenter#BlockCommentDel() function
 "   Remove block comment in i, n mode.
 function! commenter#BlockCommentDel() abort
+    let b:commenter_nextbr[1] -= strlen(b:commenter_formatmap['br']) -
+                                \ strlen(b:commenter_formatmap_s['br'])
     call cursor(b:commenter_nextbr)
     execute "normal! ".strlen(b:commenter_formatmap['br'])."x"
     call cursor(b:commenter_lastbl)
