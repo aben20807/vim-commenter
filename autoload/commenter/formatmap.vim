@@ -1,14 +1,16 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: formatmap.vim
-" Last Modified: 2018-10-23 14:40:34
+" Last Modified: 2020-10-04 09:52:33
 " Vim: enc=utf-8
 
 " Section: filetype comment format
 let s:commentMap = {
     \ 'c':          { 'll': '// ',  'bl': '/* ',    'br': ' */'     },
+    \ 'cmake':      { 'll': '# '                                    },
     \ 'conf':       { 'll': '# '                                    },
     \ 'cpp':        { 'll': '// ',  'bl': '/* ',    'br': ' */'     },
     \ 'css':        {               'bl': '/* ',    'br': ' */'     },
+    \ 'dockerfile': { 'll': '# '                                    },
     \ 'gnuplot':    { 'll': '# '                                    },
     \ 'html':       {               'bl': '<!-- ',  'br': ' -->'    },
     \ 'htmlm4':     {               'bl': '<!-- ',  'br': ' -->'    },
