@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: commenter.vim
-" Last Modified: 2018-10-25 14:10:01
+" Last Modified: 2023-11-06 11:15:01
 " Vim: enc=utf-8
 
 
@@ -110,7 +110,7 @@ endfunction
 "   If commented then uncomment it, otherwise comment it.
 function! commenter#Comment() abort
     if !b:commenter_supported
-        call commenter#ShowInfo("   ❖  無設定註解格式 ❖ ")
+        call commenter#ShowInfo("   ❖  no comment format ❖ ")
         return
     endif
     let l:curcol = col(".")
@@ -118,11 +118,11 @@ function! commenter#Comment() abort
     let l:isInComment = commenter#HasComment()
     if l:isInComment ==# 2
         call commenter#BlockCommentDel()
-        call commenter#ShowInfo("   ❖  移除區塊註解 ❖ ")
+        call commenter#ShowInfo("   ❖  remove block comment ❖ ")
     elseif l:isInComment ==# 1
         call commenter#CommentDel()
         call cursor(l:curline, l:curcol - strlen(b:commenter_formatmap['ll']))
-        call commenter#ShowInfo("   ❖  移除註解 ❖ ")
+        call commenter#ShowInfo("   ❖  remove comment ❖ ")
     elseif l:isInComment ==# 0
         execute "normal! \<S-^>"
         call commenter#CommentAdd(col('.'))
@@ -133,7 +133,7 @@ function! commenter#Comment() abort
             call cursor(l:curline, l:curcol +
                         \ strlen(b:commenter_formatmap['bl']))
         endif
-        call commenter#ShowInfo("   ❖  加入註解 ❖ ")
+        call commenter#ShowInfo("   ❖  add comment ❖ ")
     endif
 endfunction
 
@@ -182,10 +182,10 @@ function! commenter#CommentV(vmode) abort
     if a:vmode ==# 'V' || !g:commenter_use_block_comment
         if l:isInComment ==# 1
             call commenter#CommentVDel()
-            call commenter#ShowInfo("   ❖  移除註解 ❖ ")
+            call commenter#ShowInfo("   ❖  remove comment ❖ ")
         elseif l:isInComment ==# 0
             call commenter#CommentVAdd()
-            call commenter#ShowInfo("   ❖  加入註解 ❖ ")
+            call commenter#ShowInfo("   ❖  add comment ❖ ")
         endif
         if g:commenter_keep_select
             execute "normal! gv"
@@ -221,7 +221,7 @@ function! commenter#CommentV(vmode) abort
                 execute "normal! \<ESC>"
             endif
         endif
-        call commenter#ShowInfo("   ❖  加入區塊註解 ❖ ")
+        call commenter#ShowInfo("   ❖  add block comment ❖ ")
     else " a:vmode ==# 'ctrl v'
         if l:isInComment ==# 2 && !g:commenter_allow_nest_block
             return
@@ -232,7 +232,7 @@ function! commenter#CommentV(vmode) abort
         if g:commenter_keep_select
             execute "normal! gv".strlen(b:commenter_formatmap['br'])."l"
         endif
-        call commenter#ShowInfo("   ❖  加入區塊註解 ❖ ")
+        call commenter#ShowInfo("   ❖  add block comment ❖ ")
     endif
 endfunction
 

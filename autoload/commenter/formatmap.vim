@@ -1,6 +1,6 @@
 " Author: Huang Po-Hsuan <aben20807@gmail.com>
 " Filename: formatmap.vim
-" Last Modified: 2020-10-04 09:52:33
+" Last Modified: 2023-11-06 11:15:33
 " Vim: enc=utf-8
 
 " Section: filetype comment format
@@ -18,6 +18,7 @@ let s:commentMap = {
     \ 'javascript': { 'll': '// ',  'bl': '/* ',    'br': ' */'     },
     \ 'lex':        { 'll': '// ',  'bl': '/* ',    'br': ' */'     },
     \ 'lisp':       { 'll': '; ',   'bl': '#| ',    'br': ' |#'     },
+    \ 'lua':        { 'll': '-- ',  'bl': '--[[ ',  'br': ' --]]'   },
     \ 'make':       { 'll': '# '                                    },
     \ 'prolog':     { 'll': '% '                                    },
     \ 'python':     { 'll': '# '                                    },
